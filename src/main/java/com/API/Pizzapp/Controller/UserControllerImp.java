@@ -1,6 +1,7 @@
 package com.API.Pizzapp.Controller;
 
 
+import com.API.Pizzapp.Models.AuthResponse;
 import com.API.Pizzapp.Models.LoginDTO;
 import com.API.Pizzapp.Models.ResponseDTO;
 import com.API.Pizzapp.Models.UserEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/v1/User")
+@CrossOrigin("*")
 public class UserControllerImp implements  UserControllerI{
 
 
@@ -25,10 +27,10 @@ public class UserControllerImp implements  UserControllerI{
     @RequestMapping(method = RequestMethod.POST, path = "/createUser")
     public ResponseEntity createUser(@RequestBody UserEntity userEntity){
 
-        ResponseDTO responseDTO= new ResponseDTO();
+        AuthResponse responseDTO= new AuthResponse();
         try{
 
-            responseDTO.setResponse(userServiceI.createUser(userEntity));
+            responseDTO=(userServiceI.createUser(userEntity));
 
             return  new ResponseEntity(responseDTO,HttpStatus.CREATED );
         }catch (Exception e){
@@ -40,13 +42,14 @@ public class UserControllerImp implements  UserControllerI{
     @RequestMapping(method = RequestMethod.POST, path = "/loginUser")
        public ResponseEntity loginUser(@RequestBody LoginDTO loginDTO) {
 
-        UserEntity responseDTO;
+        AuthResponse responseDTO;
         try {
 
             responseDTO = (userServiceI.loginUser(loginDTO));
 
             return new ResponseEntity(responseDTO, HttpStatus.CREATED);
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
         }
     }

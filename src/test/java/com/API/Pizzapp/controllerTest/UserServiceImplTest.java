@@ -1,5 +1,6 @@
 package com.API.Pizzapp.controllerTest;
 
+import com.API.Pizzapp.Models.AuthResponse;
 import com.API.Pizzapp.Models.LoginDTO;
 import com.API.Pizzapp.Models.UserEntity;
 import com.API.Pizzapp.Repository.UserRepository;
@@ -54,9 +55,9 @@ public class UserServiceImplTest {
         loginDTO.setPassword("password");
 
         UserEntity user = new UserEntity();
-        when(userRepository.findByEmailAndPassword(loginDTO.getEmail(), loginDTO.getPassword())).thenReturn(user);
+        when(userRepository.findByEmail(loginDTO.getEmail()).orElseThrow(any()));
 
-        UserEntity response = userService.loginUser(loginDTO);
+        AuthResponse response = userService.loginUser(loginDTO);
         assertEquals(user, response);
     }
 
@@ -66,9 +67,9 @@ public class UserServiceImplTest {
         loginDTO.setEmail("wrong@email.com");
         loginDTO.setPassword("wrongpassword");
 
-        when(userRepository.findByEmailAndPassword(loginDTO.getEmail(), loginDTO.getPassword())).thenReturn(null);
+        when(userRepository.findByEmail(loginDTO.getEmail())).thenReturn(null);
 
-        UserEntity response = userService.loginUser(loginDTO);
+        AuthResponse response = userService.loginUser(loginDTO);
         assertEquals(null, response);
     }
 

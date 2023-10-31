@@ -1,38 +1,65 @@
 package com.API.Pizzapp.Services.Impl;
 
 
+import com.API.Pizzapp.Models.AuthResponse;
 import com.API.Pizzapp.Models.LoginDTO;
 import com.API.Pizzapp.Models.UserEntity;
 import com.API.Pizzapp.Repository.UserRepository;
+import com.API.Pizzapp.Services.JwtService;
 import com.API.Pizzapp.Services.UserServiceI;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserServiceI {
 
 
-    UserRepository userRepository;
+
+    private final UserRepository userRepository;
+    private final JwtService jwtService;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, JwtService jwtService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
+        this.jwtService = jwtService;
+        this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
     }
 
 
     @Override
-    public String createUser(UserEntity userEntity) {
-        UserEntity savedUser = userRepository.save(userEntity);
-        if (savedUser != null && savedUser.getId() != null) {
-            return "Usuario creado exitosamente " ;
-        } else {
-            return "Error al crear el usuario";
-        }
+    public AuthResponse createUser(UserEntity userEntity) {
+        UserEntity user = UserEntity.builder()
+                .email(userEntity.getEmail())
+                .password(passwordEncoder.encode( userEntity.getPassword()))
+                .nombre(userEntity.getNombre())
+                .apellido(userEntity.getApellido())
+                .nombreUsuario(userEntity.getNombreUsuario())
+                .build();
+
+        userRepository.save(user);
+
+        return AuthResponse.builder()
+                .token(jwtService.getToken(user))
+                .build();
+
     }
 
     @Override
-    public UserEntity loginUser(LoginDTO loginDTO) {
-        return userRepository.findByEmailAndPassword(loginDTO.getEmail(),loginDTO.getPassword());
+    public AuthResponse loginUser(LoginDTO loginDTO) {
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword()));
+        UserDetails user= (UserDetails) userRepository.findByEmail(loginDTO.getEmail()).orElseThrow();
+        String token=jwtService.getToken(user);
+        return AuthResponse.builder()
+                .token(token)
+                .build();
 
     }
 
