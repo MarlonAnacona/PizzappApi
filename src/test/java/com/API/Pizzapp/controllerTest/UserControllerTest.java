@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.HttpStatus.*;
 
 import com.API.Pizzapp.Controller.UserControllerImp;
+import com.API.Pizzapp.Models.AuthResponse;
 import com.API.Pizzapp.Models.LoginDTO;
 import com.API.Pizzapp.Models.ResponseDTO;
 import com.API.Pizzapp.Models.UserEntity;
@@ -35,32 +36,33 @@ public class UserControllerTest {
         UserEntity user = new UserEntity();
         user.setNombre("Test");
 
-        when(userServiceI.createUser(any(UserEntity.class))).thenReturn("Usuario creado exitosamente ");
+        AuthResponse mockAuthResponse = new AuthResponse();
+        mockAuthResponse.setToken("testToken");
+
+        when(userServiceI.createUser(any(UserEntity.class))).thenReturn(mockAuthResponse);
 
         ResponseEntity result = userControllerImp.createUser(user);
 
-        assertEquals(CREATED, result.getStatusCode());
-        assertTrue(result.getBody() instanceof ResponseDTO);
+        assertEquals(HttpStatus.CREATED, result.getStatusCode());
+        assertTrue(result.getBody() instanceof AuthResponse);
     }
 
     @Test
     public void testLoginUser() {
         LoginDTO login = new LoginDTO();
-        // Suppose the DTO has setEmail and setPassword methods
         login.setEmail("test@example.com");
         login.setPassword("password123");
 
-        UserEntity mockUser = new UserEntity();
-        mockUser.setEmail("test@example.com");
+        AuthResponse mockAuthResponse = new AuthResponse();
+        mockAuthResponse.setToken("testToken");
 
-        when(userServiceI.loginUser(any(LoginDTO.class))).thenReturn(mockUser);
+        when(userServiceI.loginUser(any(LoginDTO.class))).thenReturn(mockAuthResponse);
 
         ResponseEntity result = userControllerImp.loginUser(login);
 
-        assertEquals(CREATED, result.getStatusCode());
-        assertTrue(result.getBody() instanceof UserEntity);
+        assertEquals(HttpStatus.CREATED, result.getStatusCode());
+        assertTrue(result.getBody() instanceof AuthResponse);
     }
-
     @Test
     public void testUpdateUser() {
         UserEntity user = new UserEntity();

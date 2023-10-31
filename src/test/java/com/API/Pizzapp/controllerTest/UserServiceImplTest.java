@@ -5,15 +5,19 @@ import com.API.Pizzapp.Models.LoginDTO;
 import com.API.Pizzapp.Models.UserEntity;
 import com.API.Pizzapp.Repository.UserRepository;
 import com.API.Pizzapp.Services.Impl.UserServiceImpl;
+import com.API.Pizzapp.Services.JwtService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class UserServiceImplTest {
@@ -24,9 +28,19 @@ public class UserServiceImplTest {
     @Mock
     private UserRepository userRepository;
 
+    @Mock
+    private AuthenticationManager authenticationManager;
+
+    @Mock
+    private  PasswordEncoder passwordEncoder;
+
+    @Mock
+    private JwtService jwtService;
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+        when(jwtService.getToken(any(UserDetails.class))).thenReturn("someToken");
+
     }
 
     @Test
@@ -36,16 +50,15 @@ public class UserServiceImplTest {
 
         when(userRepository.save(any(UserEntity.class))).thenReturn(user);
 
-        String response = userService.createUser(new UserEntity());
-        assertEquals("Usuario creado exitosamente ", response);
+        AuthResponse response = userService.createUser(new UserEntity());
+        assertNotNull(response.getToken()); // Asegurarse de que el token no sea nulo
     }
 
     @Test
     public void testCreateUserFailure() {
-        when(userRepository.save(any(UserEntity.class))).thenReturn(new UserEntity());
+        when(userRepository.save(any(UserEntity.class))).thenThrow(new RuntimeException("Error al crear el usuario"));
 
-        String response = userService.createUser(new UserEntity());
-        assertEquals("Error al crear el usuario", response);
+        assertThrows(RuntimeException.class, () -> userService.createUser(new UserEntity()));
     }
 
     @Test
@@ -55,11 +68,12 @@ public class UserServiceImplTest {
         loginDTO.setPassword("password");
 
         UserEntity user = new UserEntity();
-        when(userRepository.findByEmail(loginDTO.getEmail()).orElseThrow(any()));
+        when(userRepository.findByEmail(loginDTO.getEmail())).thenReturn(Optional.of(user));
 
         AuthResponse response = userService.loginUser(loginDTO);
-        assertEquals(user, response);
+        assertNotNull(response.getToken()); // Asegurarse de que el token no sea nulo
     }
+
 
     @Test
     public void testLoginUserFailure() {
@@ -67,10 +81,9 @@ public class UserServiceImplTest {
         loginDTO.setEmail("wrong@email.com");
         loginDTO.setPassword("wrongpassword");
 
-        when(userRepository.findByEmail(loginDTO.getEmail())).thenReturn(null);
+        when(userRepository.findByEmail(loginDTO.getEmail())).thenReturn(Optional.empty());
 
-        AuthResponse response = userService.loginUser(loginDTO);
-        assertEquals(null, response);
+        assertThrows(Exception.class, () -> userService.loginUser(loginDTO));
     }
 
     @Test
