@@ -62,3 +62,7 @@ jacocoTestReport {
 test {
 	finalizedBy 'jacocoTestReport'
 }
+
+tasks.jar{
+	enabled=false
+}
