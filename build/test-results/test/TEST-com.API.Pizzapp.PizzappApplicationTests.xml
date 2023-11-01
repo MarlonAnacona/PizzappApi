@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.API.Pizzapp.PizzappApplicationTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-11-01T04:09:30" hostname="DESKTOP-BUIKG96" time="0.475">
+<testsuite name="com.API.Pizzapp.PizzappApplicationTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-11-01T14:34:20" hostname="DESKTOP-BUIKG96" time="0.402">
   <properties/>
-  <testcase name="contextLoads()" classname="com.API.Pizzapp.PizzappApplicationTests" time="0.475"/>
-  <system-out><![CDATA[23:09:20.602 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.API.Pizzapp.PizzappApplicationTests]: PizzappApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-23:09:20.757 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.API.Pizzapp.PizzappApplication for test class com.API.Pizzapp.PizzappApplicationTests
+  <testcase name="contextLoads()" classname="com.API.Pizzapp.PizzappApplicationTests" time="0.402"/>
+  <system-out><![CDATA[09:34:11.226 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.API.Pizzapp.PizzappApplicationTests]: PizzappApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+09:34:11.374 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.API.Pizzapp.PizzappApplication for test class com.API.Pizzapp.PizzappApplicationTests
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -13,28 +13,28 @@
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::                (v3.1.5)
 
-2023-10-31T23:09:21.336-05:00  INFO 12236 --- [    Test worker] c.API.Pizzapp.PizzappApplicationTests    : Starting PizzappApplicationTests using Java 17.0.7 with PID 12236 (started by Marlon Anacona in E:\Documentos\moviles\Spring\Pizzapp)
-2023-10-31T23:09:21.338-05:00  INFO 12236 --- [    Test worker] c.API.Pizzapp.PizzappApplicationTests    : No active profile set, falling back to 1 default profile: "default"
-2023-10-31T23:09:22.156-05:00  INFO 12236 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
-2023-10-31T23:09:22.158-05:00  INFO 12236 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
-2023-10-31T23:09:22.206-05:00  INFO 12236 --- [    Test worker] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface com.API.Pizzapp.Repository.UserRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
-2023-10-31T23:09:22.206-05:00  INFO 12236 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 41 ms. Found 0 JDBC repository interfaces.
-2023-10-31T23:09:22.218-05:00  INFO 12236 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
-2023-10-31T23:09:22.219-05:00  INFO 12236 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2023-10-31T23:09:22.255-05:00  INFO 12236 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 31 ms. Found 1 JPA repository interfaces.
-2023-10-31T23:09:22.789-05:00  INFO 12236 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2023-10-31T23:09:22.870-05:00  INFO 12236 --- [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.2.13.Final
-2023-10-31T23:09:22.875-05:00  INFO 12236 --- [    Test worker] org.hibernate.cfg.Environment            : HHH000406: Using bytecode reflection optimizer
-2023-10-31T23:09:23.313-05:00  INFO 12236 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2023-10-31T23:09:23.356-05:00  INFO 12236 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2023-10-31T23:09:25.315-05:00  INFO 12236 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@68b2ce71
-2023-10-31T23:09:25.318-05:00  INFO 12236 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2023-10-31T23:09:25.513-05:00  WARN 12236 --- [    Test worker] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2023-10-31T23:09:27.026-05:00  INFO 12236 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2023-10-31T23:09:28.943-05:00  INFO 12236 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2023-10-31T23:09:29.344-05:00  WARN 12236 --- [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2023-10-31T23:09:29.459-05:00  INFO 12236 --- [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@69dc42f2, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7cb24a91, org.springframework.security.web.context.SecurityContextHolderFilter@4d704218, org.springframework.security.web.header.HeaderWriterFilter@5fc50c30, org.springframework.security.web.authentication.logout.LogoutFilter@74791130, com.API.Pizzapp.Security.JwtAuthenticationFilter@5a7686, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@6ae6a1ce, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@3b4a0d96, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@74db196c, org.springframework.security.web.session.SessionManagementFilter@3a21aae2, org.springframework.security.web.access.ExceptionTranslationFilter@3ec4816, org.springframework.security.web.access.intercept.AuthorizationFilter@470a4e26]
-2023-10-31T23:09:30.196-05:00  INFO 12236 --- [    Test worker] c.API.Pizzapp.PizzappApplicationTests    : Started PizzappApplicationTests in 9.218 seconds (process running for 10.917)
+2023-11-01T09:34:11.905-05:00  INFO 3728 --- [    Test worker] c.API.Pizzapp.PizzappApplicationTests    : Starting PizzappApplicationTests using Java 17.0.7 with PID 3728 (started by Marlon Anacona in E:\Documentos\moviles\Spring\Pizzapp)
+2023-11-01T09:34:11.907-05:00  INFO 3728 --- [    Test worker] c.API.Pizzapp.PizzappApplicationTests    : No active profile set, falling back to 1 default profile: "default"
+2023-11-01T09:34:12.700-05:00  INFO 3728 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2023-11-01T09:34:12.702-05:00  INFO 3728 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2023-11-01T09:34:12.743-05:00  INFO 3728 --- [    Test worker] .RepositoryConfigurationExtensionSupport : Spring Data JDBC - Could not safely identify store assignment for repository candidate interface com.API.Pizzapp.Repository.UserRepository; If you want this repository to be a JDBC repository, consider annotating your entities with one of these annotations: org.springframework.data.relational.core.mapping.Table.
+2023-11-01T09:34:12.744-05:00  INFO 3728 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 35 ms. Found 0 JDBC repository interfaces.
+2023-11-01T09:34:12.759-05:00  INFO 3728 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2023-11-01T09:34:12.760-05:00  INFO 3728 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-11-01T09:34:12.791-05:00  INFO 3728 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 26 ms. Found 1 JPA repository interfaces.
+2023-11-01T09:34:13.305-05:00  INFO 3728 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-11-01T09:34:13.383-05:00  INFO 3728 --- [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.2.13.Final
+2023-11-01T09:34:13.386-05:00  INFO 3728 --- [    Test worker] org.hibernate.cfg.Environment            : HHH000406: Using bytecode reflection optimizer
+2023-11-01T09:34:13.754-05:00  INFO 3728 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2023-11-01T09:34:13.794-05:00  INFO 3728 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-11-01T09:34:15.803-05:00  INFO 3728 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@65bcc339
+2023-11-01T09:34:15.805-05:00  INFO 3728 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-11-01T09:34:15.998-05:00  WARN 3728 --- [    Test worker] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2023-11-01T09:34:17.387-05:00  INFO 3728 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2023-11-01T09:34:19.305-05:00  INFO 3728 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-11-01T09:34:19.696-05:00  WARN 3728 --- [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-11-01T09:34:19.797-05:00  INFO 3728 --- [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@4f16f68d, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@519cb1bd, org.springframework.security.web.context.SecurityContextHolderFilter@5094dde8, org.springframework.security.web.header.HeaderWriterFilter@63ab7cfb, org.springframework.security.web.authentication.logout.LogoutFilter@33255547, com.API.Pizzapp.Security.JwtAuthenticationFilter@2fe44d9b, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@5d309ccf, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7f6d3ce5, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@3cceea18, org.springframework.security.web.session.SessionManagementFilter@3d3f91a1, org.springframework.security.web.access.ExceptionTranslationFilter@7bea6d16, org.springframework.security.web.access.intercept.AuthorizationFilter@3ec40a18]
+2023-11-01T09:34:20.468-05:00  INFO 3728 --- [    Test worker] c.API.Pizzapp.PizzappApplicationTests    : Started PizzappApplicationTests in 8.883 seconds (process running for 10.545)
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
