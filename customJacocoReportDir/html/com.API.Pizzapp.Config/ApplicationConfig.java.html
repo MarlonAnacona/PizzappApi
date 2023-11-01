@@ -4,8 +4,7 @@ import com.API.Pizzapp.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -24,34 +23,34 @@ public class ApplicationConfig {
 
     private final UserRepository userRepository;
     @Autowired
-<span class="nc" id="L27">    public ApplicationConfig(UserRepository userRepository) {</span>
-<span class="nc" id="L28">        this.userRepository = userRepository;</span>
-<span class="nc" id="L29">    }</span>
+<span class="fc" id="L26">    public ApplicationConfig(UserRepository userRepository) {</span>
+<span class="fc" id="L27">        this.userRepository = userRepository;</span>
+<span class="fc" id="L28">    }</span>
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception
     {
-<span class="nc" id="L34">        return config.getAuthenticationManager();</span>
+<span class="fc" id="L33">        return config.getAuthenticationManager();</span>
     }
 
     @Bean
     public AuthenticationProvider authenticationProvider()
     {
-<span class="nc" id="L40">        DaoAuthenticationProvider authenticationProvider= new DaoAuthenticationProvider();</span>
-<span class="nc" id="L41">        authenticationProvider.setUserDetailsService(userDetailService());</span>
-<span class="nc" id="L42">        authenticationProvider.setPasswordEncoder(passwordEncoder());</span>
-<span class="nc" id="L43">        return authenticationProvider;</span>
+<span class="fc" id="L39">        DaoAuthenticationProvider authenticationProvider= new DaoAuthenticationProvider();</span>
+<span class="fc" id="L40">        authenticationProvider.setUserDetailsService(userDetailService());</span>
+<span class="fc" id="L41">        authenticationProvider.setPasswordEncoder(passwordEncoder());</span>
+<span class="fc" id="L42">        return authenticationProvider;</span>
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-<span class="nc" id="L48">        return new BCryptPasswordEncoder();</span>
+<span class="fc" id="L47">        return new BCryptPasswordEncoder();</span>
     }
 
     @Bean
     public UserDetailsService userDetailService() {
-<span class="nc" id="L53">        return email -&gt; (UserDetails) userRepository.findByEmail(email)</span>
-<span class="nc" id="L54">                .orElseThrow(()-&gt; new UsernameNotFoundException(&quot;User not fournd&quot;));</span>
+<span class="pc" id="L52">        return email -&gt; (UserDetails) userRepository.findByEmail(email)</span>
+<span class="nc" id="L53">                .orElseThrow(()-&gt; new UsernameNotFoundException(&quot;User not fournd&quot;));</span>
     }
 
 }

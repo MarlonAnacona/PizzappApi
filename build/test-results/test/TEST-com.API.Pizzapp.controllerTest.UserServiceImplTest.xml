@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.API.Pizzapp.controllerTest.UserServiceImplTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2023-10-31T21:07:19" hostname="DESKTOP-BUIKG96" time="0.309">
+<testsuite name="com.API.Pizzapp.controllerTest.UserServiceImplTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2023-11-01T04:09:31" hostname="DESKTOP-BUIKG96" time="0.392">
   <properties/>
-  <testcase name="testUpdateUserNotFound()" classname="com.API.Pizzapp.controllerTest.UserServiceImplTest" time="0.263"/>
-  <testcase name="testUpdateUserSuccess()" classname="com.API.Pizzapp.controllerTest.UserServiceImplTest" time="0.007"/>
-  <testcase name="testLoginUserSuccess()" classname="com.API.Pizzapp.controllerTest.UserServiceImplTest" time="0.013"/>
+  <testcase name="testUpdateUserNotFound()" classname="com.API.Pizzapp.controllerTest.UserServiceImplTest" time="0.352"/>
+  <testcase name="testUpdateUserSuccess()" classname="com.API.Pizzapp.controllerTest.UserServiceImplTest" time="0.009"/>
+  <testcase name="testLoginUserSuccess()" classname="com.API.Pizzapp.controllerTest.UserServiceImplTest" time="0.007"/>
   <testcase name="testLoginUserFailure()" classname="com.API.Pizzapp.controllerTest.UserServiceImplTest" time="0.006"/>
-  <testcase name="testCreateUserSuccess()" classname="com.API.Pizzapp.controllerTest.UserServiceImplTest" time="0.006"/>
-  <testcase name="testCreateUserFailure()" classname="com.API.Pizzapp.controllerTest.UserServiceImplTest" time="0.004"/>
+  <testcase name="testCreateUserSuccess()" classname="com.API.Pizzapp.controllerTest.UserServiceImplTest" time="0.004"/>
+  <testcase name="testCreateUserFailure()" classname="com.API.Pizzapp.controllerTest.UserServiceImplTest" time="0.005"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
