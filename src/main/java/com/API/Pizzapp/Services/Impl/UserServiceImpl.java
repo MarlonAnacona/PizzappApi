@@ -3,6 +3,7 @@ package com.API.Pizzapp.Services.Impl;
 
 import com.API.Pizzapp.Models.AuthResponse;
 import com.API.Pizzapp.Models.LoginDTO;
+import com.API.Pizzapp.Models.UserDetailsImpl;
 import com.API.Pizzapp.Models.UserEntity;
 import com.API.Pizzapp.Repository.UserRepository;
 import com.API.Pizzapp.Services.JwtService;
@@ -45,18 +46,19 @@ public class UserServiceImpl implements UserServiceI {
                 .build();
 
         userRepository.save(user);
-
+        UserDetails userDetails = new UserDetailsImpl(user);
         return AuthResponse.builder()
-                .token(jwtService.getToken(user))
+                .token(jwtService.getToken(userDetails))
                 .build();
 
     }
 
     @Override
     public AuthResponse loginUser(LoginDTO loginDTO) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword()));
-        UserDetails user= (UserDetails) userRepository.findByEmail(loginDTO.getEmail()).orElseThrow();
-        String token=jwtService.getToken(user);
+
+        UserEntity user=  userRepository.findByEmail(loginDTO.getEmail()).orElseThrow();
+        UserDetails userDetails = new UserDetailsImpl(user);
+        String token = jwtService.getToken(userDetails);
         return AuthResponse.builder()
                 .token(token)
                 .build();

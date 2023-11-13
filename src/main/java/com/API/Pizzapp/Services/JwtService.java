@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import com.API.Pizzapp.Models.UserDetailsImpl;
 import com.API.Pizzapp.Models.UserEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -24,11 +25,10 @@ public class JwtService {
     public String getToken(UserDetails user) {
         Map<String, Object> extraClaims = new HashMap<>();
 
-        if (user instanceof UserEntity) {
-            UserEntity customUser = (UserEntity) user;
+        if (user instanceof UserDetailsImpl) {
+            UserEntity customUser = ((UserDetailsImpl) user).getUserEntity();
 
             extraClaims.put("nombre", customUser.getNombre());
-            extraClaims.put("email", customUser.getEmail());
             extraClaims.put("nombreUsuario", customUser.getNombreUsuario());
             extraClaims.put("apellido", customUser.getApellido());
         }
@@ -54,7 +54,6 @@ public class JwtService {
     public String getUsernameFromToken(String token) {
         return getClaim(token, Claims::getSubject);
     }
-
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username=getUsernameFromToken(token);
         return (username.equals(userDetails.getUsername())&& !isTokenExpired(token));

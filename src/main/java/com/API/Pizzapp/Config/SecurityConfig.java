@@ -1,8 +1,11 @@
 package com.API.Pizzapp.Config;
+
+import com.API.Pizzapp.Security.JWTAutorizationFilter;
 import com.API.Pizzapp.Security.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -21,30 +24,35 @@ public class SecurityConfig {
     private AuthenticationProvider authenticationProvider; // Inyectado desde ApplicationConfig
 
     @Autowired
-    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter ) {
+    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
 
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception
-    {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {
+
+        JWTAutorizationFilter jwtAutorizationFilter=new JWTAutorizationFilter();
+        jwtAutorizationFilter.setAuthenticationManager(authenticationManager);
+        jwtAutorizationFilter.setFilterProcessesUrl("v1/User/loginUser");
         return http
                 .csrf(csrf ->
                         csrf
                                 .disable())
                 .authorizeHttpRequests(authRequest ->
                         authRequest
-                                .requestMatchers("v1/User/loginUser","v1/User/createUser").permitAll()
+                                .requestMatchers("v1/User/loginUser", "v1/User/createUser").permitAll()
                                 .anyRequest().authenticated()
                 )
-                .sessionManagement(sessionManager->
+                .sessionManagement(sessionManager ->
                         sessionManager
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
+                .addFilter(jwtAutorizationFilter)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
 
     }
-
 }
+
+

@@ -1,5 +1,7 @@
 package com.API.Pizzapp.Config;
 
+import com.API.Pizzapp.Models.UserDetailsImpl;
+import com.API.Pizzapp.Models.UserEntity;
 import com.API.Pizzapp.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -49,8 +51,11 @@ public class ApplicationConfig {
 
     @Bean
     public UserDetailsService userDetailService() {
-        return email -> (UserDetails) userRepository.findByEmail(email)
-                .orElseThrow(()-> new UsernameNotFoundException("User not fournd"));
+        return email -> {
+            UserEntity userEntity = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+            return new UserDetailsImpl(userEntity);
+        };
     }
 
 }
