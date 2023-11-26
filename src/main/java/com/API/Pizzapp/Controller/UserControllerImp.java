@@ -1,10 +1,7 @@
 package com.API.Pizzapp.Controller;
 
 
-import com.API.Pizzapp.Models.AuthResponse;
-import com.API.Pizzapp.Models.LoginDTO;
-import com.API.Pizzapp.Models.ResponseDTO;
-import com.API.Pizzapp.Models.UserEntity;
+import com.API.Pizzapp.Models.*;
 import com.API.Pizzapp.Services.UserServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,7 +31,9 @@ public class UserControllerImp implements  UserControllerI{
 
             return  new ResponseEntity(responseDTO,HttpStatus.CREATED );
         }catch (Exception e){
-            return new ResponseEntity( HttpStatus.NOT_ACCEPTABLE);
+            ResponseDTO responseDTO1= new ResponseDTO();
+            responseDTO1.setResponse("Error al crear usuario");
+            return new ResponseEntity<>(responseDTO1.getResponse(), HttpStatus.NOT_ACCEPTABLE);
         }
     }
 
@@ -49,8 +48,9 @@ public class UserControllerImp implements  UserControllerI{
 
             return new ResponseEntity(responseDTO, HttpStatus.CREATED);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
+            ResponseDTO responseDTO1= new ResponseDTO();
+            responseDTO1.setResponse("Error aL ingresar: "+ e.getMessage() );
+            return new ResponseEntity<>(responseDTO1,HttpStatus.NOT_ACCEPTABLE);
         }
     }
 
@@ -66,10 +66,42 @@ public class UserControllerImp implements  UserControllerI{
 
             return new ResponseEntity(responseDTO, HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
+            ResponseDTO responseDTO1= new ResponseDTO();
+            responseDTO1.setResponse("Error aL actualizar: "+ e.getMessage() );
+            return new ResponseEntity<>(responseDTO1.getResponse(),HttpStatus.NOT_ACCEPTABLE);
         }
     }
 
+    @PostMapping("/request-password-reset")
+    public ResponseEntity<?> requestPasswordReset(@RequestBody ForgetPasswordDTO forgetPasswordDTO) {
+        ResponseDTO responseDTO= new ResponseDTO();
+        try{
+            userServiceI.sendVerificationCode(forgetPasswordDTO.getEmail());
+            responseDTO.setResponse("Código de verificación enviado.");
+            return ResponseEntity.ok(responseDTO);
+        }catch (Exception e){
+
+            responseDTO.setResponse(e.getMessage());
+            return new ResponseEntity<>(responseDTO,HttpStatus.NOT_ACCEPTABLE);
+
+        }
+
+    }
+
+    @PostMapping("/verify-code")
+    public ResponseEntity<?> requestPasswordReset(@RequestBody ResponseCodeDTO responseCodeDTO) {
+        ResponseDTO responseDTO= new ResponseDTO();
+
+        try{
+
+            String response = userServiceI.verifyCode(responseCodeDTO.getEmail(), responseCodeDTO.getCode());
+            responseDTO.setResponse(response);
+            return ResponseEntity.ok(responseDTO);
+        }catch (Exception e){
+            responseDTO.setResponse(e.getMessage());
+            return new ResponseEntity<>(responseDTO,HttpStatus.NOT_ACCEPTABLE);
+        }
+    }
 
 
 

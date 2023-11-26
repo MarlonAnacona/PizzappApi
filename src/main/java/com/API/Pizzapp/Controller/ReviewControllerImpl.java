@@ -28,9 +28,6 @@ public class ReviewControllerImpl implements ReviewControllerI {
     public ResponseEntity createReview(@RequestBody ReseñaEntity reseñaEntity) {
         try{
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            String username = authentication.getName();
-            // Puedes castear a UserDetails para obtener más información del usuario
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
             ReseñaEntity reseñaEntity1= reviewServiceI.createReview(reseñaEntity);
             return new ResponseEntity(reseñaEntity1, HttpStatus.CREATED);

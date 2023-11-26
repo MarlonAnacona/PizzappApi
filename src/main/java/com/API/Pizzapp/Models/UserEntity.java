@@ -6,15 +6,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
+
 import java.util.List;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Entity
 @Data
@@ -44,5 +40,22 @@ public class UserEntity{
     @OneToMany(mappedBy = "user")
     private List<ReseñaEntity> reseñas = new ArrayList<>();
 
+    @Lob
+    @Column (name="profile_picture")
+    private  byte[]profilePicture;
+
+
+    @Column(columnDefinition = "boolean default false")
+    private boolean isBlocked;
+
+
+
+    @Column(columnDefinition = "boolean default true")
+    private boolean isActive;
+
+    private LocalDateTime blockExpiryTime;
+
+    @Column(columnDefinition = "int default 0")
+    private int attemptCount ;
 
 }

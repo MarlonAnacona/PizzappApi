@@ -41,7 +41,7 @@ public class SecurityConfig {
                                 .disable())
                 .authorizeHttpRequests(authRequest ->
                         authRequest
-                                .requestMatchers("v1/User/loginUser", "v1/User/createUser").permitAll()
+                                .requestMatchers("v1/User/loginUser", "v1/User/createUser","v1/User/request-password-reset","/v1/User/verify-code").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(sessionManager ->

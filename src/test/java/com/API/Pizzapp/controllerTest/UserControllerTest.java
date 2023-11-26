@@ -48,7 +48,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void testLoginUser() {
+    public void testLoginUser() throws Exception {
         LoginDTO login = new LoginDTO();
         login.setEmail("test@example.com");
         login.setPassword("password123");
@@ -87,7 +87,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void testLoginUserInvalidInput() {
+    public void testLoginUserInvalidInput() throws Exception {
         // Simula un error al intentar iniciar sesión
         when(userServiceI.loginUser(null)).thenThrow(new RuntimeException());
 

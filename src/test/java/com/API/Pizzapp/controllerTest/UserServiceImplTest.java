@@ -62,7 +62,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void testLoginUserSuccess() {
+    public void testLoginUserSuccess() throws Exception {
         LoginDTO loginDTO = new LoginDTO();
         loginDTO.setEmail("test@email.com");
         loginDTO.setPassword("password");
