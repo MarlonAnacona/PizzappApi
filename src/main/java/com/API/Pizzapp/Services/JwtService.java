@@ -31,6 +31,7 @@ public class JwtService {
             extraClaims.put("nombre", customUser.getNombre());
             extraClaims.put("nombreUsuario", customUser.getNombreUsuario());
             extraClaims.put("apellido", customUser.getApellido());
+
         }
         return getToken(extraClaims, user);
     }

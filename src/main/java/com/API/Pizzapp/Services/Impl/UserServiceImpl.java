@@ -66,11 +66,8 @@ public class UserServiceImpl implements UserServiceI {
 
     @Override
     public AuthResponse loginUser(LoginDTO loginDTO) throws Exception {
+        UserEntity user = findUserBlock(loginDTO.getEmail());
 
-        if(isUserBlocked(loginDTO.getEmail())){
-            throw  new Exception("Usuario Bloqueado, por favor intente mas tarde");
-        }
-        UserEntity user=  userRepository.findByEmail(loginDTO.getEmail()).orElseThrow();
         UserDetails userDetails = new UserDetailsImpl(user);
         String token = jwtService.getToken(userDetails);
         return AuthResponse.builder()
@@ -94,8 +91,10 @@ public class UserServiceImpl implements UserServiceI {
 
 
     @Override
-    public UserEntity updateUser(Long id, UserEntity userUpdates) {
-        return userRepository.findById(id).map(existingUser -> {
+    public UserEntity updateUser(String email, UserEntity userUpdates) throws Exception {
+        UserEntity user = findUserBlock(email);
+
+        return userRepository.findByEmail(email).map(existingUser -> {
 
             if (userUpdates.getNombre() != null) {
                 existingUser.setNombre(userUpdates.getNombre());
@@ -122,8 +121,36 @@ public class UserServiceImpl implements UserServiceI {
         }).orElse(null);
     }
 
-    public String sendVerificationCode(String email) {
-         return userRepository.findByEmail(email).map(existingUser -> {
+    @Override
+    public UserEntity deleteUser(String email) throws Exception {
+        UserEntity user = findUserBlock(email);
+
+        return userRepository.findByEmail(email).map(existingUser -> {
+            if(existingUser.isActive()){
+                existingUser.setActive(false);
+            }
+
+            return userRepository.save(existingUser);
+
+        }).orElse(null);    }
+
+    @Override
+    public UserEntity activeUser(String email ) throws Exception {
+
+        return userRepository.findByEmail(email).map(existingUser -> {
+            if(!existingUser.isActive()){
+                existingUser.setActive(true);
+            }
+
+            return userRepository.save(existingUser);
+
+        }).orElse(null);
+    }
+
+    public String sendVerificationCode(String email) throws Exception {
+        UserEntity user = findUserBlock(email);
+
+        return userRepository.findByEmail(email).map(existingUser -> {
             CodeVerification code = new CodeVerification();
              code.setUser(existingUser);
              code.setCode(generateRandomCode());
@@ -146,7 +173,12 @@ public class UserServiceImpl implements UserServiceI {
 
         Optional<CodeVerification> verificationCodeOpt = codeRepository.findByCodeAndUserEmail(code, email);
 
-        if (verificationCodeOpt.isPresent()) {
+        if(user.getAttemptCount()>=3) {
+            user.setAttemptCount(0);
+            userRepository.save(user);
+        }
+        if (verificationCodeOpt.isPresent() ) {
+
             CodeVerification vc = verificationCodeOpt.get();
 
             // Comprobaciones de uso, expiración, etc.
@@ -164,17 +196,20 @@ public class UserServiceImpl implements UserServiceI {
             user.setAttemptCount(0);
             userRepository.save(user);
 
+
             return "Código verificado con éxito.";
         } else {
             int attempts = user.getAttemptCount() + 1;
             user.setAttemptCount(attempts);
-            if (attempts >= 4) {
+            if (attempts >= 3) {
                 user.setBlocked(true);
                 user.setBlockExpiryTime(LocalDateTime.now().plusMinutes(30));
             }
             userRepository.save(user);
-            throw new Exception("Código incorrecto. Intentos restantes: " + (4 - attempts));
+            throw new Exception("Código incorrecto. Intentos restantes: " + (3 - attempts));
+
         }
+
     }
 
     private UserEntity findUserBlock(String email) throws Exception {
@@ -185,6 +220,13 @@ public class UserServiceImpl implements UserServiceI {
         if (user.isBlocked() && user.getBlockExpiryTime().isAfter(LocalDateTime.now())) {
             throw new Exception("Usuario bloqueado. Por favor, espera hasta que el bloqueo expire.");
         }
+
+        if(!user.isActive()){
+            throw new Exception("Usuario inactivo");
+
+        }
+
+
         return user;
     }
 

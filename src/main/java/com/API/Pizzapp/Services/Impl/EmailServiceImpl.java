@@ -70,7 +70,7 @@ public class EmailServiceImpl implements EmarilServiceI {
             "<body>\n" +
             "<div class=\"email-container\">\n" +
             "  <div class=\"header\">\n" +
-            "    <img src=\"https://lh3.googleusercontent.com/pw/ADCreHe_xnTWW9JBegq2JuB3kmiWPTK4BuScamyywvARqdj9L8xWhxNw91URZmKJPZYs_rI8Y7n3dF94BF2y8O2QqdCfV7bc5GjthL3_pI_LyWh9koWP8jCRCTuj3_A77aawE5tUsZd7bEzEFZL4VrSo9qCcNxjT7l_0m5OMrmfj3FhOCwzPlrj5zluW2E1cmoDmDPTpsN8YHaRdfNZnCxzxtLRqeL-RX6AIfg1_KL1ACXz3iO5YFVpWkjRHBhIlShm3SKpq8jgxrRL7YK3BB77YOfiJTTtNDM87CJwLoZ08bdWsi9Tu-hhPqAnHTSYvurU6203LwyvGecgCdmYffzR3pTF-mDtBM9wV-oCedkGh2pjUqjeMNElN-genivetJvmQ0b8E-IPL1o9l0Qj4owVFyPofHub1XV_HQPK7EGZBBumkbqRHCWwzOU0egaTdLNNkBnItPvIz_-aFhCUUQiD1C5-SImRDcMqIOGcExTNp0IhiXqPOy-AZCBdZL_eloiKSbx8p1qJJX8kCsOu6p6W71qfFMgm6HH3S0TvisLCKNGaeACzOxgIAtQNRW2RoPkellIm_vEC5hAO10q4H0AnF91d9b3uTKL69ToA7-jc1R5GcRWkXC1FgWyjcizpBpgfCngvd29KV-yI07XEie0cTrlST6n-16cnHDG9uXqnn0kAUlwkGuRiOjgBceZrwcVxaoIVtRFVi0gwyIYXAKOkE8hVOpQdXZDFRZtGKEQGl9uloKJQUQXlDObTFp9RKMsxVwk3TOfLvRyzGPKdo5-Z0W45xyQWfVM-txUlc_BusVovooQl7zo818z_vLK7edLhy6P3BFtqLUo-qOkwqukqyX1un0BOTP6AKLrpILYYcVO_FtALmHuDH6Gb84VMmql_tM4xDOCocngU857NQ_ewQ1--6V-A1oVEUMZhFzp4=w500-h500-s-no-gm?authuser=0\" alt=\"PizzaApp Logo\">\n" +
+            "    <a href=\"https://imgur.com/6bwCXbV\"><img src=\"https://i.imgur.com/6bwCXbV.png\" title=\"source: imgur.com\" /></a>\n" +
             "    <h1>Restablecimiento de Contraseña</h1>\n" +
             "  </div>\n" +
             "  <p>Estimado usuario,</p>\n" +

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EmailServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Pizzapp</a> &gt; <a href="index.source.html" class="el_package">com.API.Pizzapp.Services.Impl</a> &gt; <span class="el_source">EmailServiceImpl.java</span></div><h1>EmailServiceImpl.java</h1><pre class="source lang-java linenums">package com.API.Pizzapp.Services.Impl;
+
+import com.API.Pizzapp.Services.EmarilServiceI;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Service;
+
+@Service
+<span class="fc" id="L13">public class EmailServiceImpl implements EmarilServiceI {</span>
+    @Autowired
+    private JavaMailSender mailSender;
+
+<span class="fc" id="L17">    private String htmlTemplate = &quot;&lt;!DOCTYPE html&gt;\n&quot; +</span>
+            &quot;&lt;html lang=\&quot;es\&quot;&gt;\n&quot; +
+            &quot;&lt;head&gt;\n&quot; +
+            &quot;&lt;meta charset=\&quot;UTF-8\&quot;&gt;\n&quot; +
+            &quot;&lt;meta name=\&quot;viewport\&quot; content=\&quot;width=device-width, initial-scale=1.0\&quot;&gt;\n&quot; +
+            &quot;&lt;style&gt;\n&quot; +
+            &quot;  body {\n&quot; +
+            &quot;    font-family: 'Arial', sans-serif;\n&quot; +
+            &quot;    margin: 0;\n&quot; +
+            &quot;    padding: 0;\n&quot; +
+            &quot;    background-color: #FAFAFA;\n&quot; +
+            &quot;    color: #333;\n&quot; +
+            &quot;  }\n&quot; +
+            &quot;  .email-container {\n&quot; +
+            &quot;    max-width: 600px;\n&quot; +
+            &quot;    margin: 20px auto;\n&quot; +
+            &quot;    padding: 20px;\n&quot; +
+            &quot;    background-color: #FFF;\n&quot; +
+            &quot;    border: 1px solid #DDD;\n&quot; +
+            &quot;    border-radius: 5px;\n&quot; +
+            &quot;    text-align: center;\n&quot; +
+            &quot;  }\n&quot; +
+            &quot;  .header {\n&quot; +
+            &quot;    background-color: #D32F2F;\n&quot; +
+            &quot;    color: white;\n&quot; +
+            &quot;    padding: 10px;\n&quot; +
+            &quot;    border-top-left-radius: 5px;\n&quot; +
+            &quot;    border-top-right-radius: 5px;\n&quot; +
+            &quot;  }\n&quot; +
+            &quot;  .header img {\n&quot; +
+            &quot;    width: 100px;\n&quot; +
+            &quot;    height: auto;\n&quot; +
+            &quot;  }\n&quot; +
+            &quot;  .code-container {\n&quot; +
+            &quot;    background-color: #000;\n&quot; +
+            &quot;    color: #FFF;\n&quot; +
+            &quot;    padding: 20px;\n&quot; +
+            &quot;    margin: 20px 0;\n&quot; +
+            &quot;    font-size: 24px;\n&quot; +
+            &quot;    font-weight: bold;\n&quot; +
+            &quot;  }\n&quot; +
+            &quot;  .footer {\n&quot; +
+            &quot;    font-size: 14px;\n&quot; +
+            &quot;    color: #555;\n&quot; +
+            &quot;    padding: 10px;\n&quot; +
+            &quot;  }\n&quot; +
+            &quot;  .validity {\n&quot; +
+            &quot;    font-size: 12px;\n&quot; +
+            &quot;    color: #888;\n&quot; +
+            &quot;    margin-top: 10px;\n&quot; +
+            &quot;  }\n&quot; +
+            &quot;&lt;/style&gt;\n&quot; +
+            &quot;&lt;/head&gt;\n&quot; +
+            &quot;&lt;body&gt;\n&quot; +
+            &quot;&lt;div class=\&quot;email-container\&quot;&gt;\n&quot; +
+            &quot;  &lt;div class=\&quot;header\&quot;&gt;\n&quot; +
+            &quot;    &lt;img src=\&quot;https://lh3.googleusercontent.com/pw/ADCreHe_xnTWW9JBegq2JuB3kmiWPTK4BuScamyywvARqdj9L8xWhxNw91URZmKJPZYs_rI8Y7n3dF94BF2y8O2QqdCfV7bc5GjthL3_pI_LyWh9koWP8jCRCTuj3_A77aawE5tUsZd7bEzEFZL4VrSo9qCcNxjT7l_0m5OMrmfj3FhOCwzPlrj5zluW2E1cmoDmDPTpsN8YHaRdfNZnCxzxtLRqeL-RX6AIfg1_KL1ACXz3iO5YFVpWkjRHBhIlShm3SKpq8jgxrRL7YK3BB77YOfiJTTtNDM87CJwLoZ08bdWsi9Tu-hhPqAnHTSYvurU6203LwyvGecgCdmYffzR3pTF-mDtBM9wV-oCedkGh2pjUqjeMNElN-genivetJvmQ0b8E-IPL1o9l0Qj4owVFyPofHub1XV_HQPK7EGZBBumkbqRHCWwzOU0egaTdLNNkBnItPvIz_-aFhCUUQiD1C5-SImRDcMqIOGcExTNp0IhiXqPOy-AZCBdZL_eloiKSbx8p1qJJX8kCsOu6p6W71qfFMgm6HH3S0TvisLCKNGaeACzOxgIAtQNRW2RoPkellIm_vEC5hAO10q4H0AnF91d9b3uTKL69ToA7-jc1R5GcRWkXC1FgWyjcizpBpgfCngvd29KV-yI07XEie0cTrlST6n-16cnHDG9uXqnn0kAUlwkGuRiOjgBceZrwcVxaoIVtRFVi0gwyIYXAKOkE8hVOpQdXZDFRZtGKEQGl9uloKJQUQXlDObTFp9RKMsxVwk3TOfLvRyzGPKdo5-Z0W45xyQWfVM-txUlc_BusVovooQl7zo818z_vLK7edLhy6P3BFtqLUo-qOkwqukqyX1un0BOTP6AKLrpILYYcVO_FtALmHuDH6Gb84VMmql_tM4xDOCocngU857NQ_ewQ1--6V-A1oVEUMZhFzp4=w500-h500-s-no-gm?authuser=0\&quot; alt=\&quot;PizzaApp Logo\&quot;&gt;\n&quot; +
+            &quot;    &lt;h1&gt;Restablecimiento de ContraseÃ±a&lt;/h1&gt;\n&quot; +
+            &quot;  &lt;/div&gt;\n&quot; +
+            &quot;  &lt;p&gt;Estimado usuario,&lt;/p&gt;\n&quot; +
+            &quot;  &lt;p&gt;Has solicitado restablecer tu contraseÃ±a. Por favor, introduce el siguiente cÃ³digo en la aplicaciÃ³n:&lt;/p&gt;\n&quot; +
+            &quot;  &lt;div class=\&quot;code-container\&quot;&gt;\n&quot; +
+            &quot;    CÃ“DIGO: %s\n&quot; +
+            &quot;  &lt;/div&gt;\n&quot; +
+            &quot;  &lt;p class=\&quot;validity\&quot;&gt;Este cÃ³digo es vÃ¡lido por 15 minutos. Pasado este tiempo, necesitarÃ¡s solicitar uno nuevo.&lt;/p&gt;\n&quot; +
+            &quot;  &lt;div class=\&quot;footer\&quot;&gt;\n&quot; +
+            &quot;    &lt;p&gt;Si no has solicitado un restablecimiento de contraseÃ±a, por favor ignora este mensaje.&lt;/p&gt;\n&quot; +
+            &quot;  &lt;/div&gt;\n&quot; +
+            &quot;&lt;/div&gt;\n&quot; +
+            &quot;&lt;/body&gt;\n&quot; +
+            &quot;&lt;/html&gt;&quot;;
+
+    @Override
+    public void sendEmail(String to, String subject, String code) {
+<span class="nc" id="L91">        String htmlContent = String.format(htmlTemplate, code);</span>
+
+        try {
+<span class="nc" id="L94">            MimeMessage message = mailSender.createMimeMessage();</span>
+<span class="nc" id="L95">            MimeMessageHelper helper = new MimeMessageHelper(message, true, &quot;UTF-8&quot;);</span>
+<span class="nc" id="L96">            helper.setFrom(&quot;pizzaappnoreply@gmail.com&quot;);</span>
+<span class="nc" id="L97">            helper.setTo(to);</span>
+<span class="nc" id="L98">            helper.setSubject(subject);</span>
+<span class="nc" id="L99">            helper.setText(htmlContent, true);</span>
+
+<span class="nc" id="L101">            mailSender.send(message);</span>
+<span class="nc" id="L102">        }  catch (MessagingException e) {</span>
+<span class="nc" id="L103">            throw new RuntimeException(e);</span>
+<span class="nc" id="L104">        }</span>
+<span class="nc" id="L105">    }</span>
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -12,10 +12,14 @@ public interface UserServiceI {
 
     public AuthResponse loginUser(LoginDTO loginDTO) throws Exception;
 
-    public UserEntity updateUser(Long id, UserEntity userUpdates);
+    public UserEntity updateUser(String email, UserEntity userUpdates) throws Exception;
 
 
-    public String sendVerificationCode(String email);
+    public UserEntity deleteUser(String email ) throws Exception;
+    public UserEntity activeUser(String email ) throws Exception;
+
+
+    public String sendVerificationCode(String email) throws Exception;
 
     public String verifyCode(String email, String code) throws Exception;
 }

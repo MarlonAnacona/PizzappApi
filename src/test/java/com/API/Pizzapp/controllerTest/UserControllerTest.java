@@ -10,6 +10,7 @@ import com.API.Pizzapp.Models.LoginDTO;
 import com.API.Pizzapp.Models.ResponseDTO;
 import com.API.Pizzapp.Models.UserEntity;
 import com.API.Pizzapp.Services.UserServiceI;
+import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -31,6 +32,8 @@ public class UserControllerTest {
         MockitoAnnotations.openMocks(this);
     }
 
+    @Mock
+    private HttpServletRequest request;
     @Test
     public void testCreateUser() {
         UserEntity user = new UserEntity();
@@ -64,13 +67,13 @@ public class UserControllerTest {
         assertTrue(result.getBody() instanceof AuthResponse);
     }
     @Test
-    public void testUpdateUser() {
+    public void testUpdateUser() throws Exception {
         UserEntity user = new UserEntity();
         user.setNombre("Updated Name");
 
-        when(userServiceI.updateUser(any(Long.class), any(UserEntity.class))).thenReturn(user);
+        when(userServiceI.updateUser(any(String.class), any(UserEntity.class))).thenReturn(user);
 
-        ResponseEntity result = userControllerImp.updateUser(1L, user);
+        ResponseEntity result = userControllerImp.updateUser(request, user);
 
         assertEquals(CREATED, result.getStatusCode());
         assertTrue(result.getBody() instanceof UserEntity);
@@ -97,12 +100,12 @@ public class UserControllerTest {
     }
 
     @Test
-    public void testUpdateUserInvalidInput() {
+    public void testUpdateUserInvalidInput() throws Exception {
         // Simula un error al intentar actualizar un usuario
-        Long invalidId = 1L;
+        String invalidId = "1L";
         when(userServiceI.updateUser(invalidId, null)).thenThrow(new RuntimeException());
 
-        ResponseEntity response = userControllerImp.updateUser(invalidId, null);
+        ResponseEntity response = userControllerImp.updateUser(request, null);
 
         assertEquals(HttpStatus.NOT_ACCEPTABLE, response.getStatusCode());
     }

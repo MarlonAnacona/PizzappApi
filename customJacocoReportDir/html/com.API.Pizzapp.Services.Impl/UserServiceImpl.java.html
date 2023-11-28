@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Pizzapp</a> &gt; <a href="index.source.html" class="el_package">com.API.Pizzapp.Services.Impl</a> &gt; <span class="el_source">UserServiceImpl.java</span></div><h1>UserServiceImpl.java</h1><pre class="source lang-java linenums">package com.API.Pizzapp.Services.Impl;
 
 
-import com.API.Pizzapp.Models.AuthResponse;
-import com.API.Pizzapp.Models.LoginDTO;
-import com.API.Pizzapp.Models.UserEntity;
+import com.API.Pizzapp.Models.*;
 import com.API.Pizzapp.Repository.UserRepository;
+import com.API.Pizzapp.Repository.VerificationCodeRepository;
 import com.API.Pizzapp.Services.JwtService;
 import com.API.Pizzapp.Services.UserServiceI;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +13,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.security.SecureRandom;
+import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 public class UserServiceImpl implements UserServiceI {
@@ -25,72 +29,173 @@ public class UserServiceImpl implements UserServiceI {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
+    private VerificationCodeRepository codeRepository;
+
+    private EmailServiceImpl emailService;
+
     @Autowired
-<span class="fc" id="L29">    public UserServiceImpl(UserRepository userRepository, JwtService jwtService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {</span>
-<span class="fc" id="L30">        this.userRepository = userRepository;</span>
-<span class="fc" id="L31">        this.jwtService = jwtService;</span>
-<span class="fc" id="L32">        this.passwordEncoder = passwordEncoder;</span>
-<span class="fc" id="L33">        this.authenticationManager = authenticationManager;</span>
-<span class="fc" id="L34">    }</span>
+<span class="fc" id="L37">    public UserServiceImpl(UserRepository userRepository, JwtService jwtService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, VerificationCodeRepository codeRepository, EmailServiceImpl emailService) {</span>
+<span class="fc" id="L38">        this.userRepository = userRepository;</span>
+<span class="fc" id="L39">        this.jwtService = jwtService;</span>
+<span class="fc" id="L40">        this.passwordEncoder = passwordEncoder;</span>
+<span class="fc" id="L41">        this.authenticationManager = authenticationManager;</span>
+<span class="fc" id="L42">        this.codeRepository = codeRepository;</span>
+<span class="fc" id="L43">        this.emailService = emailService;</span>
+<span class="fc" id="L44">    }</span>
+
 
 
     @Override
     public AuthResponse createUser(UserEntity userEntity) {
-<span class="fc" id="L39">        UserEntity user = UserEntity.builder()</span>
-<span class="fc" id="L40">                .email(userEntity.getEmail())</span>
-<span class="fc" id="L41">                .password(passwordEncoder.encode( userEntity.getPassword()))</span>
-<span class="fc" id="L42">                .nombre(userEntity.getNombre())</span>
-<span class="fc" id="L43">                .apellido(userEntity.getApellido())</span>
-<span class="fc" id="L44">                .nombreUsuario(userEntity.getNombreUsuario())</span>
-<span class="fc" id="L45">                .build();</span>
-
-<span class="fc" id="L47">        userRepository.save(user);</span>
-
-<span class="fc" id="L49">        return AuthResponse.builder()</span>
-<span class="fc" id="L50">                .token(jwtService.getToken(user))</span>
-<span class="fc" id="L51">                .build();</span>
+<span class="fc" id="L50">        UserEntity user = UserEntity.builder()</span>
+<span class="fc" id="L51">                .email(userEntity.getEmail())</span>
+<span class="fc" id="L52">                .password(passwordEncoder.encode( userEntity.getPassword()))</span>
+<span class="fc" id="L53">                .nombre(userEntity.getNombre())</span>
+<span class="fc" id="L54">                .apellido(userEntity.getApellido())</span>
+<span class="fc" id="L55">                .nombreUsuario(userEntity.getNombreUsuario())</span>
+<span class="fc" id="L56">                .build();</span>
+<span class="fc" id="L57">        user.setActive(true);</span>
+<span class="fc" id="L58">        user.setBlocked(false);</span>
+<span class="fc" id="L59">        userRepository.save(user);</span>
+<span class="fc" id="L60">        UserDetails userDetails = new UserDetailsImpl(user);</span>
+<span class="fc" id="L61">        return AuthResponse.builder()</span>
+<span class="fc" id="L62">                .token(jwtService.getToken(userDetails))</span>
+<span class="fc" id="L63">                .build();</span>
 
     }
 
     @Override
-    public AuthResponse loginUser(LoginDTO loginDTO) {
-<span class="fc" id="L57">        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword()));</span>
-<span class="fc" id="L58">        UserDetails user= (UserDetails) userRepository.findByEmail(loginDTO.getEmail()).orElseThrow();</span>
-<span class="fc" id="L59">        String token=jwtService.getToken(user);</span>
-<span class="fc" id="L60">        return AuthResponse.builder()</span>
-<span class="fc" id="L61">                .token(token)</span>
-<span class="fc" id="L62">                .build();</span>
+    public AuthResponse loginUser(LoginDTO loginDTO) throws Exception {
+
+<span class="pc bpc" id="L70" title="1 of 2 branches missed.">        if(isUserBlocked(loginDTO.getEmail())){</span>
+<span class="nc" id="L71">            throw  new Exception(&quot;Usuario Bloqueado, por favor intente mas tarde&quot;);</span>
+        }
+<span class="fc" id="L73">        UserEntity user=  userRepository.findByEmail(loginDTO.getEmail()).orElseThrow();</span>
+<span class="fc" id="L74">        UserDetails userDetails = new UserDetailsImpl(user);</span>
+<span class="fc" id="L75">        String token = jwtService.getToken(userDetails);</span>
+<span class="fc" id="L76">        return AuthResponse.builder()</span>
+<span class="fc" id="L77">                .token(token)</span>
+<span class="fc" id="L78">                .build();</span>
 
     }
+
+    public boolean isUserBlocked(String email) {
+<span class="fc" id="L83">        UserEntity user = userRepository.findByEmail(email).orElse(null);</span>
+<span class="pc bpc" id="L84" title="1 of 4 branches missed.">        if (user != null &amp;&amp; user.isBlocked()) {</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">            if (user.getBlockExpiryTime().isAfter(LocalDateTime.now())) {</span>
+<span class="nc" id="L86">                return true;</span>
+            } else {
+<span class="nc" id="L88">                user.setBlocked(false);</span>
+<span class="nc" id="L89">                userRepository.save(user);</span>
+            }
+        }
+<span class="fc" id="L92">        return false;</span>
+    }
+
 
     @Override
     public UserEntity updateUser(Long id, UserEntity userUpdates) {
-<span class="fc" id="L68">        return userRepository.findById(id).map(existingUser -&gt; {</span>
+<span class="fc" id="L98">        return userRepository.findById(id).map(existingUser -&gt; {</span>
 
-<span class="pc bpc" id="L70" title="1 of 2 branches missed.">            if (userUpdates.getNombre() != null) {</span>
-<span class="fc" id="L71">                existingUser.setNombre(userUpdates.getNombre());</span>
+<span class="pc bpc" id="L100" title="1 of 2 branches missed.">            if (userUpdates.getNombre() != null) {</span>
+<span class="fc" id="L101">                existingUser.setNombre(userUpdates.getNombre());</span>
             }
 
-<span class="pc bpc" id="L74" title="1 of 2 branches missed.">            if (userUpdates.getEmail() != null) {</span>
-<span class="fc" id="L75">                existingUser.setEmail(userUpdates.getEmail());</span>
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">            if (userUpdates.getEmail() != null) {</span>
+<span class="fc" id="L105">                existingUser.setEmail(userUpdates.getEmail());</span>
             }
 
-<span class="pc bpc" id="L78" title="1 of 2 branches missed.">            if (userUpdates.getNombreUsuario() != null) {</span>
-<span class="fc" id="L79">                existingUser.setNombreUsuario(userUpdates.getNombreUsuario());</span>
+<span class="pc bpc" id="L108" title="1 of 2 branches missed.">            if (userUpdates.getNombreUsuario() != null) {</span>
+<span class="fc" id="L109">                existingUser.setNombreUsuario(userUpdates.getNombreUsuario());</span>
             }
 
-<span class="pc bpc" id="L82" title="1 of 2 branches missed.">            if (userUpdates.getPassword() != null) {</span>
-<span class="fc" id="L83">                existingUser.setPassword(userUpdates.getPassword());</span>
+<span class="pc bpc" id="L112" title="1 of 2 branches missed.">            if (userUpdates.getPassword() != null) {</span>
+<span class="fc" id="L113">                existingUser.setPassword(userUpdates.getPassword());</span>
             }
 
-<span class="pc bpc" id="L86" title="1 of 2 branches missed.">            if (userUpdates.getApellido() != null) {</span>
-<span class="fc" id="L87">                existingUser.setApellido(userUpdates.getApellido());</span>
+<span class="pc bpc" id="L116" title="1 of 2 branches missed.">            if (userUpdates.getApellido() != null) {</span>
+<span class="fc" id="L117">                existingUser.setApellido(userUpdates.getApellido());</span>
             }
 
-<span class="fc" id="L90">            return userRepository.save(existingUser);</span>
+<span class="fc" id="L120">            return userRepository.save(existingUser);</span>
 
-<span class="fc" id="L92">        }).orElse(null);</span>
+<span class="fc" id="L122">        }).orElse(null);</span>
     }
+
+    public String sendVerificationCode(String email) {
+<span class="nc" id="L126">         return userRepository.findByEmail(email).map(existingUser -&gt; {</span>
+<span class="nc" id="L127">            CodeVerification code = new CodeVerification();</span>
+<span class="nc" id="L128">             code.setUser(existingUser);</span>
+<span class="nc" id="L129">             code.setCode(generateRandomCode());</span>
+<span class="nc" id="L130">             code.setExpiryDate(LocalDateTime.now().plusMinutes(15));</span>
+<span class="nc" id="L131">             code.setUsed(false);</span>
+<span class="nc" id="L132">            codeRepository.save(code);</span>
+
+<span class="nc" id="L134">            emailService.sendEmail(</span>
+                    email,
+                    &quot;Tu cÃ³digo de verificaciÃ³n&quot;,
+<span class="nc" id="L137">                     code.getCode()</span>
+            );
+<span class="nc" id="L139">        return  &quot;Envio exitoso&quot;;</span>
+<span class="nc" id="L140">        }).orElse(&quot;No se encuentra el correo registrado&quot;);</span>
+    }
+
+    public String verifyCode(String email, String code) throws Exception {
+        // Encuentra el usuario por email en lugar de buscar por cÃ³digo.
+<span class="nc" id="L145">        UserEntity user = findUserBlock(email);</span>
+
+<span class="nc" id="L147">        Optional&lt;CodeVerification&gt; verificationCodeOpt = codeRepository.findByCodeAndUserEmail(code, email);</span>
+
+<span class="nc bnc" id="L149" title="All 2 branches missed.">        if (verificationCodeOpt.isPresent()) {</span>
+<span class="nc" id="L150">            CodeVerification vc = verificationCodeOpt.get();</span>
+
+            // Comprobaciones de uso, expiraciÃ³n, etc.
+<span class="nc bnc" id="L153" title="All 2 branches missed.">            if (vc.isUsed()) {</span>
+<span class="nc" id="L154">                throw new Exception(&quot;CÃ³digo ya utilizado.&quot;);</span>
+            }
+
+<span class="nc bnc" id="L157" title="All 2 branches missed.">            if (vc.getExpiryDate().isBefore(LocalDateTime.now())) {</span>
+<span class="nc" id="L158">                throw new Exception(&quot;CÃ³digo expirado.&quot;);</span>
+            }
+
+<span class="nc" id="L161">            vc.setUsed(true);</span>
+<span class="nc" id="L162">            codeRepository.save(vc);</span>
+
+<span class="nc" id="L164">            user.setAttemptCount(0);</span>
+<span class="nc" id="L165">            userRepository.save(user);</span>
+
+<span class="nc" id="L167">            return &quot;CÃ³digo verificado con Ã©xito.&quot;;</span>
+        } else {
+<span class="nc" id="L169">            int attempts = user.getAttemptCount() + 1;</span>
+<span class="nc" id="L170">            user.setAttemptCount(attempts);</span>
+<span class="nc bnc" id="L171" title="All 2 branches missed.">            if (attempts &gt;= 4) {</span>
+<span class="nc" id="L172">                user.setBlocked(true);</span>
+<span class="nc" id="L173">                user.setBlockExpiryTime(LocalDateTime.now().plusMinutes(30));</span>
+            }
+<span class="nc" id="L175">            userRepository.save(user);</span>
+<span class="nc" id="L176">            throw new Exception(&quot;CÃ³digo incorrecto. Intentos restantes: &quot; + (4 - attempts));</span>
+        }
+    }
+
+    private UserEntity findUserBlock(String email) throws Exception {
+<span class="nc" id="L181">        UserEntity user = userRepository.findByEmail(email)</span>
+<span class="nc" id="L182">                .orElseThrow(() -&gt; new Exception(&quot;Usuario no encontrado.&quot;));</span>
+
+        // Comprueba si el usuario ya estÃ¡ bloqueado.
+<span class="nc bnc" id="L185" title="All 4 branches missed.">        if (user.isBlocked() &amp;&amp; user.getBlockExpiryTime().isAfter(LocalDateTime.now())) {</span>
+<span class="nc" id="L186">            throw new Exception(&quot;Usuario bloqueado. Por favor, espera hasta que el bloqueo expire.&quot;);</span>
+        }
+<span class="nc" id="L188">        return user;</span>
+    }
+
+
+    private String generateRandomCode() {
+<span class="nc" id="L193">        SecureRandom random = new SecureRandom();</span>
+<span class="nc" id="L194">        int randomCode = 1000 + random.nextInt(9000); // 1000 (inclusive) a 9999 (inclusive)</span>
+<span class="nc" id="L195">        return String.valueOf(randomCode);</span>
+    }
+
+
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

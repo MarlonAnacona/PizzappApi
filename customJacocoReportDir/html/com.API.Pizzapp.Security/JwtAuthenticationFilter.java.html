@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -18,7 +19,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 @Component
-<span class="fc" id="L21">@RequiredArgsConstructor</span>
+<span class="fc" id="L22">@RequiredArgsConstructor</span>
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
@@ -30,46 +31,47 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-<span class="nc" id="L33">        final String token = getTokenFromRequest(request);</span>
+<span class="nc" id="L34">        final String token = getTokenFromRequest(request);</span>
         final String username;
 
-<span class="nc bnc" id="L36" title="All 2 branches missed.">        if (token==null)</span>
+<span class="nc bnc" id="L37" title="All 2 branches missed.">        if (token==null)</span>
         {
-<span class="nc" id="L38">            filterChain.doFilter(request, response);</span>
-<span class="nc" id="L39">            return;</span>
+<span class="nc" id="L39">            filterChain.doFilter(request, response);</span>
+<span class="nc" id="L40">            return;</span>
         }
 
-<span class="nc" id="L42">        username=jwtService.getUsernameFromToken(token);</span>
+<span class="nc" id="L43">        username=jwtService.getUsernameFromToken(token);</span>
 
-<span class="nc bnc" id="L44" title="All 4 branches missed.">        if (username!=null &amp;&amp; SecurityContextHolder.getContext().getAuthentication()==null)</span>
+<span class="nc bnc" id="L45" title="All 4 branches missed.">        if (username!=null &amp;&amp; SecurityContextHolder.getContext().getAuthentication()==null)</span>
         {
-<span class="nc" id="L46">            UserDetails userDetails=userDetailsService.loadUserByUsername(username);</span>
+<span class="nc" id="L47">            UserDetails userDetails=userDetailsService.loadUserByUsername(username);</span>
 
-<span class="nc bnc" id="L48" title="All 2 branches missed.">            if (jwtService.isTokenValid(token, userDetails))</span>
+<span class="nc bnc" id="L49" title="All 2 branches missed.">            if (jwtService.isTokenValid(token, userDetails))</span>
             {
-<span class="nc" id="L50">                UsernamePasswordAuthenticationToken authToken= new UsernamePasswordAuthenticationToken(</span>
+<span class="nc" id="L51">                UsernamePasswordAuthenticationToken authToken= new UsernamePasswordAuthenticationToken(</span>
                         userDetails,
                         null,
-<span class="nc" id="L53">                        userDetails.getAuthorities());</span>
+<span class="nc" id="L54">                        userDetails.getAuthorities());</span>
 
-<span class="nc" id="L55">                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));</span>
+<span class="nc" id="L56">                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));</span>
 
-<span class="nc" id="L57">                SecurityContextHolder.getContext().setAuthentication(authToken);</span>
+<span class="nc" id="L58">                SecurityContextHolder.getContext().setAuthentication(authToken);</span>
             }
 
         }
 
-<span class="nc" id="L62">        filterChain.doFilter(request, response);</span>
-<span class="nc" id="L63">    }</span>
+<span class="nc" id="L63">        filterChain.doFilter(request, response);</span>
+<span class="nc" id="L64">    }</span>
 
     private String getTokenFromRequest(HttpServletRequest request) {
-<span class="nc" id="L66">        final String authHeader=request.getHeader(HttpHeaders.AUTHORIZATION);</span>
+<span class="nc" id="L67">        final String authHeader=request.getHeader(HttpHeaders.AUTHORIZATION);</span>
 
-<span class="nc bnc" id="L68" title="All 4 branches missed.">        if(StringUtils.hasText(authHeader) &amp;&amp; authHeader.startsWith(&quot;Bearer&quot;))</span>
+
+<span class="nc bnc" id="L70" title="All 4 branches missed.">        if(StringUtils.hasText(authHeader) &amp;&amp; authHeader.startsWith(&quot;Bearer &quot;))</span>
         {
-<span class="nc" id="L70">            return authHeader.substring(7);</span>
+<span class="nc" id="L72">            return authHeader.substring(7);</span>
         }
-<span class="nc" id="L72">        return null;</span>
+<span class="nc" id="L74">        return null;</span>
     }
 
 

@@ -87,8 +87,8 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void testUpdateUserSuccess() {
-        Long id = 1L;
+    public void testUpdateUserSuccess() throws Exception {
+        String id = "1L";
         UserEntity existingUser = new UserEntity();
         existingUser.setNombre("Existing Name");
         existingUser.setEmail("Existing email");
@@ -104,7 +104,7 @@ public class UserServiceImplTest {
         userUpdates.setApellido("New lastanme");
         userUpdates.setNombreUsuario("New UserName");
 
-        when(userRepository.findById(id)).thenReturn(Optional.of(existingUser));
+        when(userRepository.findByEmail(id)).thenReturn(Optional.of(existingUser));
         when(userRepository.save(existingUser)).thenReturn(existingUser);
 
         UserEntity updatedUser = userService.updateUser(id, userUpdates);
@@ -112,9 +112,9 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void testUpdateUserNotFound() {
-        Long id = 1L;
-        when(userRepository.findById(id)).thenReturn(Optional.empty());
+    public void testUpdateUserNotFound() throws Exception {
+        String id = "1L";
+        when(userRepository.findByEmail(id)).thenReturn(Optional.empty());
 
         UserEntity response = userService.updateUser(id, new UserEntity());
         assertEquals(null, response);

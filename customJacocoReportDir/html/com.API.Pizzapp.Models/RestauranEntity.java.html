@@ -21,21 +21,22 @@ public class RestauranEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 <span class="nc" id="L22">    private Long id;</span>
 
-<span class="nc" id="L24">    private String nombre;</span>
+    @Column(unique = true)
+<span class="nc" id="L25">    private String nombre;</span>
 
-<span class="nc" id="L26">    private String telefono;</span>
+<span class="nc" id="L27">    private String telefono;</span>
 
     @Temporal(TemporalType.TIMESTAMP)
-<span class="nc" id="L29">    private Date fechaCreacion;</span>
+<span class="nc" id="L30">    private Date fechaCreacion;</span>
 
     @Column(nullable = false)
-<span class="nc" id="L32">    private Double coordenadaX;</span>
+<span class="nc" id="L33">    private Double coordenadaX;</span>
 
     @Column(nullable = false)
-<span class="nc" id="L35">    private Double coordenadaY;</span>
+<span class="nc" id="L36">    private Double coordenadaY;</span>
 
-<span class="pc" id="L37">    @OneToMany(mappedBy = &quot;restaurante&quot;)</span>
-<span class="nc" id="L38">    private List&lt;ReseÃ±aEntity&gt; reseÃ±as = new ArrayList&lt;&gt;();</span>
+<span class="pc" id="L38">    @OneToMany(mappedBy = &quot;restaurante&quot;)</span>
+<span class="nc" id="L39">    private List&lt;ReseÃ±aEntity&gt; reseÃ±as = new ArrayList&lt;&gt;();</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
