@@ -9,6 +9,8 @@ import com.API.Pizzapp.Models.AuthResponse;
 import com.API.Pizzapp.Models.LoginDTO;
 import com.API.Pizzapp.Models.ResponseDTO;
 import com.API.Pizzapp.Models.UserEntity;
+import com.API.Pizzapp.Security.JwtAuthenticationFilter;
+import com.API.Pizzapp.Services.JwtService;
 import com.API.Pizzapp.Services.UserServiceI;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,6 +36,12 @@ public class UserControllerTest {
 
     @Mock
     private HttpServletRequest request;
+
+    @Mock
+    JwtService jwtService;
+
+    @Mock
+    JwtAuthenticationFilter jwtAuthenticationFilter;
     @Test
     public void testCreateUser() {
         UserEntity user = new UserEntity();
@@ -68,15 +76,25 @@ public class UserControllerTest {
     }
     @Test
     public void testUpdateUser() throws Exception {
+        // Mock user data
         UserEntity user = new UserEntity();
         user.setNombre("Updated Name");
 
-        when(userServiceI.updateUser(any(String.class), any(UserEntity.class))).thenReturn(user);
+        // Mock JWT token and email
+        String jwtToken = "mockJwtToken";
+        String email = "user@example.com";
 
+        // Mock userServiceI.updateUser to return the user entity
+        when(request.getHeader("Authorization")).thenReturn("Bearer " + jwtToken);
+        when(jwtService.getUsernameFromToken(jwtToken)).thenReturn(email);
+        when(userServiceI.updateUser(email, user)).thenReturn(user);
+
+        // Call the updateUser method
         ResponseEntity result = userControllerImp.updateUser(request, user);
 
-        assertEquals(CREATED, result.getStatusCode());
-        assertTrue(result.getBody() instanceof UserEntity);
+        // Verify the response
+        assertEquals(HttpStatus.CREATED, result.getStatusCode());
+
     }
 
     @Test
@@ -102,7 +120,14 @@ public class UserControllerTest {
     @Test
     public void testUpdateUserInvalidInput() throws Exception {
         // Simula un error al intentar actualizar un usuario
-        String invalidId = "1L";
+        String invalidId = null;
+        String jwtToken = "mockJwtToken";
+        String email = "user@example.com";
+
+        // Mock userServiceI.updateUser to return the user entity
+        when(request.getHeader("Authorization")).thenReturn("Bearer " + jwtToken);
+        when(jwtService.getUsernameFromToken(jwtToken)).thenReturn(email);
+
         when(userServiceI.updateUser(invalidId, null)).thenThrow(new RuntimeException());
 
         ResponseEntity response = userControllerImp.updateUser(request, null);

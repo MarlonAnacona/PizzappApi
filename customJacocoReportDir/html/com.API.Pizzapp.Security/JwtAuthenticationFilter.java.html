@@ -19,7 +19,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 @Component
-<span class="fc" id="L22">@RequiredArgsConstructor</span>
+<span class="nc" id="L22">@RequiredArgsConstructor</span>
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
@@ -63,7 +63,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 <span class="nc" id="L63">        filterChain.doFilter(request, response);</span>
 <span class="nc" id="L64">    }</span>
 
-    private String getTokenFromRequest(HttpServletRequest request) {
+    public String getTokenFromRequest(HttpServletRequest request) {
 <span class="nc" id="L67">        final String authHeader=request.getHeader(HttpHeaders.AUTHORIZATION);</span>
 
 

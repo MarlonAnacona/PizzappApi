@@ -168,6 +168,23 @@ public class UserControllerImp implements  UserControllerI{
         }
     }
 
+    @RequestMapping(method = RequestMethod.GET, path = "/getUser")
+    public ResponseEntity getImage(HttpServletRequest request) {
+
+        UserGetDTO responseDTO;
+        try {
+
+            String token= jwtAutorizationFilter.getTokenFromRequest(request);
+            String email= jwtService.getUsernameFromToken(token);
+            responseDTO = (userServiceI.getUserEmail(email));
+
+            return new ResponseEntity(responseDTO, HttpStatus.CREATED);
+        } catch (Exception e) {
+            ResponseDTO responseDTO1= new ResponseDTO();
+            responseDTO1.setResponse("Error al cargar datos: "+ e.getMessage() );
+            return new ResponseEntity<>(responseDTO1,HttpStatus.NOT_ACCEPTABLE);
+        }
+    }
 
 
 }

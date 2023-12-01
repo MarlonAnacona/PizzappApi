@@ -24,33 +24,33 @@ public class SecurityConfig {
     private AuthenticationProvider authenticationProvider; // Inyectado desde ApplicationConfig
 
     @Autowired
-<span class="fc" id="L27">    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {</span>
-<span class="fc" id="L28">        this.jwtAuthenticationFilter = jwtAuthenticationFilter;</span>
+<span class="nc" id="L27">    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {</span>
+<span class="nc" id="L28">        this.jwtAuthenticationFilter = jwtAuthenticationFilter;</span>
 
-<span class="fc" id="L30">    }</span>
+<span class="nc" id="L30">    }</span>
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {
 
-<span class="fc" id="L35">        JWTAutorizationFilter jwtAutorizationFilter=new JWTAutorizationFilter();</span>
-<span class="fc" id="L36">        jwtAutorizationFilter.setAuthenticationManager(authenticationManager);</span>
-<span class="fc" id="L37">        jwtAutorizationFilter.setFilterProcessesUrl(&quot;v1/User/loginUser&quot;);</span>
-<span class="fc" id="L38">        return http</span>
-<span class="fc" id="L39">                .csrf(csrf -&gt;</span>
-<span class="fc" id="L40">                        csrf</span>
-<span class="fc" id="L41">                                .disable())</span>
-<span class="fc" id="L42">                .authorizeHttpRequests(authRequest -&gt;</span>
+<span class="nc" id="L35">        JWTAutorizationFilter jwtAutorizationFilter=new JWTAutorizationFilter();</span>
+<span class="nc" id="L36">        jwtAutorizationFilter.setAuthenticationManager(authenticationManager);</span>
+<span class="nc" id="L37">        jwtAutorizationFilter.setFilterProcessesUrl(&quot;v1/User/loginUser&quot;);</span>
+<span class="nc" id="L38">        return http</span>
+<span class="nc" id="L39">                .csrf(csrf -&gt;</span>
+<span class="nc" id="L40">                        csrf</span>
+<span class="nc" id="L41">                                .disable())</span>
+<span class="nc" id="L42">                .authorizeHttpRequests(authRequest -&gt;</span>
                         authRequest
-<span class="fc" id="L44">                                .requestMatchers(&quot;v1/User/loginUser&quot;, &quot;v1/User/createUser&quot;,&quot;v1/User/request-password-reset&quot;,&quot;/v1/User/verify-code&quot;).permitAll()</span>
-<span class="fc" id="L45">                                .anyRequest().authenticated()</span>
+<span class="nc" id="L44">                                .requestMatchers(&quot;v1/User/loginUser&quot;, &quot;v1/User/createUser&quot;,&quot;v1/User/request-password-reset&quot;,&quot;/v1/User/verify-code&quot;,&quot;/v1/User/activeUser/**&quot;,&quot;/v1/User/updatePassword/**&quot;).permitAll()</span>
+<span class="nc" id="L45">                                .anyRequest().authenticated()</span>
                 )
-<span class="fc" id="L47">                .sessionManagement(sessionManager -&gt;</span>
-<span class="fc" id="L48">                        sessionManager</span>
-<span class="fc" id="L49">                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))</span>
-<span class="fc" id="L50">                .authenticationProvider(authenticationProvider)</span>
-<span class="fc" id="L51">                .addFilter(jwtAutorizationFilter)</span>
-<span class="fc" id="L52">                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)</span>
-<span class="fc" id="L53">                .build();</span>
+<span class="nc" id="L47">                .sessionManagement(sessionManager -&gt;</span>
+<span class="nc" id="L48">                        sessionManager</span>
+<span class="nc" id="L49">                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))</span>
+<span class="nc" id="L50">                .authenticationProvider(authenticationProvider)</span>
+<span class="nc" id="L51">                .addFilter(jwtAutorizationFilter)</span>
+<span class="nc" id="L52">                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)</span>
+<span class="nc" id="L53">                .build();</span>
 
     }
 }

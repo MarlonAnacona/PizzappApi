@@ -68,6 +68,14 @@ public class UserServiceImpl implements UserServiceI {
     public AuthResponse loginUser(LoginDTO loginDTO) throws Exception {
         UserEntity user = findUserBlock(loginDTO.getEmail());
 
+        String storedPassword = user.getPassword();
+
+        // Compara la contraseña ingresada por el usuario con la contraseña almacenada en la base de datos
+        boolean passwordMatches = passwordEncoder.matches(loginDTO.getPassword(), storedPassword);
+
+        if (!passwordMatches) {
+            throw new Exception("Contraseña incorrecta");
+        }
         UserDetails userDetails = new UserDetailsImpl(user);
         String token = jwtService.getToken(userDetails);
         return AuthResponse.builder()
@@ -109,11 +117,14 @@ public class UserServiceImpl implements UserServiceI {
             }
 
             if (userUpdates.getPassword() != null) {
-                existingUser.setPassword(userUpdates.getPassword());
+                existingUser.setPassword(passwordEncoder.encode(userUpdates.getPassword()));
             }
 
             if (userUpdates.getApellido() != null) {
                 existingUser.setApellido(userUpdates.getApellido());
+            }
+            if(userUpdates.getProfilePicture() !=null){
+            existingUser.setProfilePicture(userUpdates.getProfilePicture());
             }
 
             return userRepository.save(existingUser);
@@ -238,5 +249,17 @@ public class UserServiceImpl implements UserServiceI {
     }
 
 
+    public UserGetDTO getUserEmail(String email) throws Exception {
+        UserEntity user = findUserBlock(email);
+        UserGetDTO userGetDTO= new UserGetDTO();
+        userGetDTO.setNombre(user.getNombre());
+        userGetDTO.setApellido(user.getApellido());
+        userGetDTO.setEmail(user.getEmail());
+        userGetDTO.setProfilePicture(user.getProfilePicture());
+        userGetDTO.setNombreUsuario(user.getNombreUsuario());
+
+
+       return  userGetDTO;
+    }
 
 }

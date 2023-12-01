@@ -11,19 +11,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface UserControllerI {
 
 
-
     public ResponseEntity createUser(@RequestBody UserEntity userEntity);
 
-    public ResponseEntity loginUser(@RequestBody LoginDTO loginDTO) ;
+    public ResponseEntity loginUser(@RequestBody LoginDTO loginDTO);
 
-    public ResponseEntity updateUser(HttpServletRequest request, @RequestBody UserEntity userEntity) ;
+    public ResponseEntity updateUser(HttpServletRequest request, @RequestBody UserEntity userEntity);
 
-    public ResponseEntity<?> requestPasswordReset(@RequestBody ResponseCodeDTO responseCodeDTO) ;
+    public ResponseEntity<?> requestPasswordReset(@RequestBody ResponseCodeDTO responseCodeDTO);
 
-    public ResponseEntity changePassword(String  request, @RequestBody UserEntity userEntity) ;
+    public ResponseEntity changePassword(String request, @RequestBody UserEntity userEntity);
 
-    public ResponseEntity desactiveUser(HttpServletRequest request ) ;
+    public ResponseEntity desactiveUser(HttpServletRequest request);
 
-    public ResponseEntity activeUser(String email  ) ;
+    public ResponseEntity activeUser(String email);
 
-    }
+    public ResponseEntity getImage(HttpServletRequest request);
+
+
+}

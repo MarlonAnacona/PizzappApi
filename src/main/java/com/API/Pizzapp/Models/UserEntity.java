@@ -40,7 +40,6 @@ public class UserEntity{
     @OneToMany(mappedBy = "user")
     private List<ReseñaEntity> reseñas = new ArrayList<>();
 
-    @Lob
     @Column (name="profile_picture")
     private  byte[]profilePicture;
 
