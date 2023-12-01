@@ -249,6 +249,18 @@ public class UserServiceImpl implements UserServiceI {
     }
 
 
+    public UserGetDTO getUserEmail(String email) throws Exception {
+<span class="nc" id="L253">        UserEntity user = findUserBlock(email);</span>
+<span class="nc" id="L254">        UserGetDTO userGetDTO= new UserGetDTO();</span>
+<span class="nc" id="L255">        userGetDTO.setNombre(user.getNombre());</span>
+<span class="nc" id="L256">        userGetDTO.setApellido(user.getApellido());</span>
+<span class="nc" id="L257">        userGetDTO.setEmail(user.getEmail());</span>
+<span class="nc" id="L258">        userGetDTO.setProfilePicture(user.getProfilePicture());</span>
+<span class="nc" id="L259">        userGetDTO.setNombreUsuario(user.getNombreUsuario());</span>
+
+
+<span class="nc" id="L262">       return  userGetDTO;</span>
+    }
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

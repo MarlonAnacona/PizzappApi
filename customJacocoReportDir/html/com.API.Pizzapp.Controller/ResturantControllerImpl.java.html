@@ -19,9 +19,9 @@ public class ResturantControllerImpl implements  RestaurantControllerI{
     RestauranteServiceI restauranteServiceI;
 
     @Autowired
-<span class="nc" id="L22">    public ResturantControllerImpl(RestauranteServiceI restauranteServiceI) {</span>
-<span class="nc" id="L23">        this.restauranteServiceI = restauranteServiceI;</span>
-<span class="nc" id="L24">    }</span>
+<span class="fc" id="L22">    public ResturantControllerImpl(RestauranteServiceI restauranteServiceI) {</span>
+<span class="fc" id="L23">        this.restauranteServiceI = restauranteServiceI;</span>
+<span class="fc" id="L24">    }</span>
 
     @RequestMapping(method = RequestMethod.POST, path = &quot;/CreateRestaurant&quot;)
     public ResponseEntity createRestaurant(RestauranEntity restauranEntity) {

@@ -20,9 +20,9 @@ public class ReviewControllerImpl implements ReviewControllerI {
     private ReviewServiceI reviewServiceI;
 
     @Autowired
-<span class="nc" id="L23">    public ReviewControllerImpl(ReviewServiceI reviewServiceI) {</span>
-<span class="nc" id="L24">        this.reviewServiceI = reviewServiceI;</span>
-<span class="nc" id="L25">    }</span>
+<span class="fc" id="L23">    public ReviewControllerImpl(ReviewServiceI reviewServiceI) {</span>
+<span class="fc" id="L24">        this.reviewServiceI = reviewServiceI;</span>
+<span class="fc" id="L25">    }</span>
 
     @RequestMapping(method = RequestMethod.POST, path = &quot;/CreateReview&quot;)
     public ResponseEntity createReview(@RequestBody ReseÃ±aEntity reseÃ±aEntity) {

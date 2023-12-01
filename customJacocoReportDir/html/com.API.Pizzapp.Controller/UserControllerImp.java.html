@@ -24,11 +24,11 @@ public class UserControllerImp implements  UserControllerI{
 
     JwtService jwtService;
     @Autowired
-<span class="nc" id="L27">    public UserControllerImp(UserServiceI userServiceI, JwtAuthenticationFilter jwtAutorizationFilter, JwtService jwtService) {</span>
-<span class="nc" id="L28">        this.userServiceI = userServiceI;</span>
-<span class="nc" id="L29">        this.jwtAutorizationFilter = jwtAutorizationFilter;</span>
-<span class="nc" id="L30">        this.jwtService = jwtService;</span>
-<span class="nc" id="L31">    }</span>
+<span class="fc" id="L27">    public UserControllerImp(UserServiceI userServiceI, JwtAuthenticationFilter jwtAutorizationFilter, JwtService jwtService) {</span>
+<span class="fc" id="L28">        this.userServiceI = userServiceI;</span>
+<span class="fc" id="L29">        this.jwtAutorizationFilter = jwtAutorizationFilter;</span>
+<span class="fc" id="L30">        this.jwtService = jwtService;</span>
+<span class="fc" id="L31">    }</span>
 
 
 
@@ -36,16 +36,16 @@ public class UserControllerImp implements  UserControllerI{
     @RequestMapping(method = RequestMethod.POST, path = &quot;/createUser&quot;)
     public ResponseEntity createUser(@RequestBody UserEntity userEntity){
 
-<span class="nc" id="L39">        AuthResponse responseDTO= new AuthResponse();</span>
+<span class="fc" id="L39">        AuthResponse responseDTO= new AuthResponse();</span>
         try{
 
-<span class="nc" id="L42">            responseDTO=(userServiceI.createUser(userEntity));</span>
+<span class="fc" id="L42">            responseDTO=(userServiceI.createUser(userEntity));</span>
 
-<span class="nc" id="L44">            return  new ResponseEntity(responseDTO,HttpStatus.CREATED );</span>
-<span class="nc" id="L45">        }catch (Exception e){</span>
-<span class="nc" id="L46">            ResponseDTO responseDTO1= new ResponseDTO();</span>
-<span class="nc" id="L47">            responseDTO1.setResponse(&quot;Error al crear usuario&quot;);</span>
-<span class="nc" id="L48">            return new ResponseEntity&lt;&gt;(responseDTO1, HttpStatus.NOT_ACCEPTABLE);</span>
+<span class="fc" id="L44">            return  new ResponseEntity(responseDTO,HttpStatus.CREATED );</span>
+<span class="fc" id="L45">        }catch (Exception e){</span>
+<span class="fc" id="L46">            ResponseDTO responseDTO1= new ResponseDTO();</span>
+<span class="fc" id="L47">            responseDTO1.setResponse(&quot;Error al crear usuario&quot;);</span>
+<span class="fc" id="L48">            return new ResponseEntity&lt;&gt;(responseDTO1, HttpStatus.NOT_ACCEPTABLE);</span>
         }
     }
 
@@ -56,13 +56,13 @@ public class UserControllerImp implements  UserControllerI{
         AuthResponse responseDTO;
         try {
 
-<span class="nc" id="L59">            responseDTO = (userServiceI.loginUser(loginDTO));</span>
+<span class="fc" id="L59">            responseDTO = (userServiceI.loginUser(loginDTO));</span>
 
-<span class="nc" id="L61">            return new ResponseEntity(responseDTO, HttpStatus.CREATED);</span>
-<span class="nc" id="L62">        } catch (Exception e) {</span>
-<span class="nc" id="L63">            ResponseDTO responseDTO1= new ResponseDTO();</span>
-<span class="nc" id="L64">            responseDTO1.setResponse(&quot;Error aL ingresar: &quot;+ e.getMessage() );</span>
-<span class="nc" id="L65">            return new ResponseEntity&lt;&gt;(responseDTO1,HttpStatus.NOT_ACCEPTABLE);</span>
+<span class="fc" id="L61">            return new ResponseEntity(responseDTO, HttpStatus.CREATED);</span>
+<span class="fc" id="L62">        } catch (Exception e) {</span>
+<span class="fc" id="L63">            ResponseDTO responseDTO1= new ResponseDTO();</span>
+<span class="fc" id="L64">            responseDTO1.setResponse(&quot;Error aL ingresar: &quot;+ e.getMessage() );</span>
+<span class="fc" id="L65">            return new ResponseEntity&lt;&gt;(responseDTO1,HttpStatus.NOT_ACCEPTABLE);</span>
         }
     }
 
@@ -73,15 +73,15 @@ public class UserControllerImp implements  UserControllerI{
 
         UserEntity responseDTO;
         try {
-<span class="nc" id="L76">            String token= jwtAutorizationFilter.getTokenFromRequest(request);</span>
-<span class="nc" id="L77">            String email= jwtService.getUsernameFromToken(token);</span>
-<span class="nc" id="L78">            responseDTO = (userServiceI.updateUser(email,userEntity));</span>
+<span class="fc" id="L76">            String token= jwtAutorizationFilter.getTokenFromRequest(request);</span>
+<span class="fc" id="L77">            String email= jwtService.getUsernameFromToken(token);</span>
+<span class="fc" id="L78">            responseDTO = (userServiceI.updateUser(email,userEntity));</span>
 
-<span class="nc" id="L80">            return new ResponseEntity(responseDTO, HttpStatus.CREATED);</span>
-<span class="nc" id="L81">        } catch (Exception e) {</span>
-<span class="nc" id="L82">            ResponseDTO responseDTO1= new ResponseDTO();</span>
-<span class="nc" id="L83">            responseDTO1.setResponse(&quot;Error aL actualizar: &quot;+ e.getMessage() );</span>
-<span class="nc" id="L84">            return new ResponseEntity&lt;&gt;(responseDTO1,HttpStatus.NOT_ACCEPTABLE);</span>
+<span class="fc" id="L80">            return new ResponseEntity(responseDTO, HttpStatus.CREATED);</span>
+<span class="fc" id="L81">        } catch (Exception e) {</span>
+<span class="fc" id="L82">            ResponseDTO responseDTO1= new ResponseDTO();</span>
+<span class="fc" id="L83">            responseDTO1.setResponse(&quot;Error aL actualizar: &quot;+ e.getMessage() );</span>
+<span class="fc" id="L84">            return new ResponseEntity&lt;&gt;(responseDTO1,HttpStatus.NOT_ACCEPTABLE);</span>
         }
     }
 
@@ -168,6 +168,23 @@ public class UserControllerImp implements  UserControllerI{
         }
     }
 
+    @RequestMapping(method = RequestMethod.GET, path = &quot;/getUser&quot;)
+    public ResponseEntity getImage(HttpServletRequest request) {
+
+        UserGetDTO responseDTO;
+        try {
+
+<span class="nc" id="L177">            String token= jwtAutorizationFilter.getTokenFromRequest(request);</span>
+<span class="nc" id="L178">            String email= jwtService.getUsernameFromToken(token);</span>
+<span class="nc" id="L179">            responseDTO = (userServiceI.getUserEmail(email));</span>
+
+<span class="nc" id="L181">            return new ResponseEntity(responseDTO, HttpStatus.CREATED);</span>
+<span class="nc" id="L182">        } catch (Exception e) {</span>
+<span class="nc" id="L183">            ResponseDTO responseDTO1= new ResponseDTO();</span>
+<span class="nc" id="L184">            responseDTO1.setResponse(&quot;Error al cargar datos: &quot;+ e.getMessage() );</span>
+<span class="nc" id="L185">            return new ResponseEntity&lt;&gt;(responseDTO1,HttpStatus.NOT_ACCEPTABLE);</span>
+        }
+    }
 
 
 }

@@ -18,7 +18,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
 @Service
-<span class="nc" id="L21">public class JwtService {</span>
+<span class="fc" id="L21">public class JwtService {</span>
 
     private static final String SECRET_KEY=&quot;586E3272357538782F413F4428472B4B6250655368566B597033733676397924&quot;;
 
@@ -31,59 +31,58 @@ import io.jsonwebtoken.security.Keys;
 <span class="nc" id="L31">            extraClaims.put(&quot;nombre&quot;, customUser.getNombre());</span>
 <span class="nc" id="L32">            extraClaims.put(&quot;nombreUsuario&quot;, customUser.getNombreUsuario());</span>
 <span class="nc" id="L33">            extraClaims.put(&quot;apellido&quot;, customUser.getApellido());</span>
-
         }
-<span class="nc" id="L36">        return getToken(extraClaims, user);</span>
+<span class="nc" id="L35">        return getToken(extraClaims, user);</span>
     }
 
     private String getToken(Map&lt;String,Object&gt; extraClaims, UserDetails user) {
-<span class="nc" id="L40">        return Jwts</span>
-<span class="nc" id="L41">                .builder()</span>
-<span class="nc" id="L42">                .setClaims(extraClaims)</span>
-<span class="nc" id="L43">                .setSubject(user.getUsername())</span>
-<span class="nc" id="L44">                .setIssuedAt(new Date(System.currentTimeMillis()))</span>
-<span class="nc" id="L45">                .setExpiration(new Date(System.currentTimeMillis()+1000*60*24))</span>
-<span class="nc" id="L46">                .signWith(getKey(), SignatureAlgorithm.HS256)</span>
-<span class="nc" id="L47">                .compact();</span>
+<span class="nc" id="L39">        return Jwts</span>
+<span class="nc" id="L40">                .builder()</span>
+<span class="nc" id="L41">                .setClaims(extraClaims)</span>
+<span class="nc" id="L42">                .setSubject(user.getUsername())</span>
+<span class="nc" id="L43">                .setIssuedAt(new Date(System.currentTimeMillis()))</span>
+<span class="nc" id="L44">                .setExpiration(new Date(System.currentTimeMillis()+1000*60*24))</span>
+<span class="nc" id="L45">                .signWith(getKey(), SignatureAlgorithm.HS256)</span>
+<span class="nc" id="L46">                .compact();</span>
     }
 
     private Key getKey() {
-<span class="nc" id="L51">        byte[] keyBytes=Decoders.BASE64.decode(SECRET_KEY);</span>
-<span class="nc" id="L52">        return Keys.hmacShaKeyFor(keyBytes);</span>
+<span class="nc" id="L50">        byte[] keyBytes=Decoders.BASE64.decode(SECRET_KEY);</span>
+<span class="nc" id="L51">        return Keys.hmacShaKeyFor(keyBytes);</span>
     }
 
     public String getUsernameFromToken(String token) {
-<span class="nc" id="L56">        return getClaim(token, Claims::getSubject);</span>
+<span class="nc" id="L55">        return getClaim(token, Claims::getSubject);</span>
     }
     public boolean isTokenValid(String token, UserDetails userDetails) {
-<span class="nc" id="L59">        final String username=getUsernameFromToken(token);</span>
-<span class="nc bnc" id="L60" title="All 4 branches missed.">        return (username.equals(userDetails.getUsername())&amp;&amp; !isTokenExpired(token));</span>
+<span class="nc" id="L58">        final String username=getUsernameFromToken(token);</span>
+<span class="nc bnc" id="L59" title="All 4 branches missed.">        return (username.equals(userDetails.getUsername())&amp;&amp; !isTokenExpired(token));</span>
     }
 
     private Claims getAllClaims(String token)
     {
-<span class="nc" id="L65">        return Jwts</span>
-<span class="nc" id="L66">                .parserBuilder()</span>
-<span class="nc" id="L67">                .setSigningKey(getKey())</span>
-<span class="nc" id="L68">                .build()</span>
-<span class="nc" id="L69">                .parseClaimsJws(token)</span>
-<span class="nc" id="L70">                .getBody();</span>
+<span class="nc" id="L64">        return Jwts</span>
+<span class="nc" id="L65">                .parserBuilder()</span>
+<span class="nc" id="L66">                .setSigningKey(getKey())</span>
+<span class="nc" id="L67">                .build()</span>
+<span class="nc" id="L68">                .parseClaimsJws(token)</span>
+<span class="nc" id="L69">                .getBody();</span>
     }
 
     public &lt;T&gt; T getClaim(String token, Function&lt;Claims,T&gt; claimsResolver)
     {
-<span class="nc" id="L75">        final Claims claims=getAllClaims(token);</span>
-<span class="nc" id="L76">        return claimsResolver.apply(claims);</span>
+<span class="nc" id="L74">        final Claims claims=getAllClaims(token);</span>
+<span class="nc" id="L75">        return claimsResolver.apply(claims);</span>
     }
 
     private Date getExpiration(String token)
     {
-<span class="nc" id="L81">        return getClaim(token, Claims::getExpiration);</span>
+<span class="nc" id="L80">        return getClaim(token, Claims::getExpiration);</span>
     }
 
     private boolean isTokenExpired(String token)
     {
-<span class="nc" id="L86">        return getExpiration(token).before(new Date());</span>
+<span class="nc" id="L85">        return getExpiration(token).before(new Date());</span>
     }
 
 }

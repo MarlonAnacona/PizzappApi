@@ -40,23 +40,22 @@ public class UserEntity{
 <span class="fc" id="L40">    @OneToMany(mappedBy = &quot;user&quot;)</span>
 <span class="nc" id="L41">    private List&lt;ReseÃ±aEntity&gt; reseÃ±as = new ArrayList&lt;&gt;();</span>
 
-    @Lob
     @Column (name=&quot;profile_picture&quot;)
-<span class="fc" id="L45">    private  byte[]profilePicture;</span>
+<span class="fc" id="L44">    private  byte[]profilePicture;</span>
 
 
     @Column(columnDefinition = &quot;boolean default false&quot;)
-<span class="fc" id="L49">    private boolean isBlocked;</span>
+<span class="fc" id="L48">    private boolean isBlocked;</span>
 
 
 
     @Column(columnDefinition = &quot;boolean default true&quot;)
-<span class="fc" id="L54">    private boolean isActive;</span>
+<span class="fc" id="L53">    private boolean isActive;</span>
 
-<span class="nc" id="L56">    private LocalDateTime blockExpiryTime;</span>
+<span class="nc" id="L55">    private LocalDateTime blockExpiryTime;</span>
 
     @Column(columnDefinition = &quot;int default 0&quot;)
-<span class="nc" id="L59">    private int attemptCount ;</span>
+<span class="nc" id="L58">    private int attemptCount ;</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

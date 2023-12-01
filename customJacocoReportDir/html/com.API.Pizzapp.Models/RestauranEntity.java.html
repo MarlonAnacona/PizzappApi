@@ -14,7 +14,7 @@ import java.util.List;
 
 @Entity
 <span class="nc bnc" id="L16" title="All 62 branches missed.">@Data</span>
-<span class="nc" id="L17">@NoArgsConstructor</span>
+<span class="fc" id="L17">@NoArgsConstructor</span>
 <span class="nc" id="L18">@AllArgsConstructor</span>
 public class RestauranEntity {
     @Id
@@ -35,7 +35,7 @@ public class RestauranEntity {
     @Column(nullable = false)
 <span class="nc" id="L36">    private Double coordenadaY;</span>
 
-<span class="nc" id="L38">    @OneToMany(mappedBy = &quot;restaurante&quot;)</span>
+<span class="pc" id="L38">    @OneToMany(mappedBy = &quot;restaurante&quot;)</span>
 <span class="nc" id="L39">    private List&lt;ReseÃ±aEntity&gt; reseÃ±as = new ArrayList&lt;&gt;();</span>
 
 }
