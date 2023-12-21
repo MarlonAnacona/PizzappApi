@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.API.Pizzapp.controllerTest.UserServiceImplTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2023-12-01T19:01:48" hostname="DESKTOP-BUIKG96" time="0.22">
+<testsuite name="com.API.Pizzapp.controllerTest.UserServiceImplTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2023-12-21T17:47:28" hostname="DESKTOP-BUIKG96" time="0.228">
   <properties/>
-  <testcase name="testUpdateUserNotFound()" classname="com.API.Pizzapp.controllerTest.UserServiceImplTest" time="0.194"/>
+  <testcase name="testUpdateUserNotFound()" classname="com.API.Pizzapp.controllerTest.UserServiceImplTest" time="0.202"/>
   <testcase name="testUpdateUserSuccess()" classname="com.API.Pizzapp.controllerTest.UserServiceImplTest" time="0.005"/>
   <testcase name="testLoginUserSuccess()" classname="com.API.Pizzapp.controllerTest.UserServiceImplTest" time="0.006"/>
   <testcase name="testLoginUserFailure()" classname="com.API.Pizzapp.controllerTest.UserServiceImplTest" time="0.003"/>

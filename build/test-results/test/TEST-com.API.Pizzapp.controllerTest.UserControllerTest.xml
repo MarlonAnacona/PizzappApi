@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.API.Pizzapp.controllerTest.UserControllerTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2023-12-01T19:01:47" hostname="DESKTOP-BUIKG96" time="0.666">
+<testsuite name="com.API.Pizzapp.controllerTest.UserControllerTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2023-12-21T17:47:27" hostname="DESKTOP-BUIKG96" time="0.681">
   <properties/>
-  <testcase name="testLoginUserInvalidInput()" classname="com.API.Pizzapp.controllerTest.UserControllerTest" time="0.612"/>
+  <testcase name="testLoginUserInvalidInput()" classname="com.API.Pizzapp.controllerTest.UserControllerTest" time="0.632"/>
   <testcase name="testCreateUserInvalidInput()" classname="com.API.Pizzapp.controllerTest.UserControllerTest" time="0.005"/>
-  <testcase name="testLoginUser()" classname="com.API.Pizzapp.controllerTest.UserControllerTest" time="0.017"/>
+  <testcase name="testLoginUser()" classname="com.API.Pizzapp.controllerTest.UserControllerTest" time="0.015"/>
   <testcase name="testUpdateUser()" classname="com.API.Pizzapp.controllerTest.UserControllerTest" time="0.014"/>
   <testcase name="testUpdateUserInvalidInput()" classname="com.API.Pizzapp.controllerTest.UserControllerTest" time="0.004"/>
   <testcase name="testCreateUser()" classname="com.API.Pizzapp.controllerTest.UserControllerTest" time="0.003"/>

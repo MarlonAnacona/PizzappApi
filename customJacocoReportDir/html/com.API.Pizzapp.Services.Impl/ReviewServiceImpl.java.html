@@ -1,50 +1,99 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ReviewServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Pizzapp</a> &gt; <a href="index.source.html" class="el_package">com.API.Pizzapp.Services.Impl</a> &gt; <span class="el_source">ReviewServiceImpl.java</span></div><h1>ReviewServiceImpl.java</h1><pre class="source lang-java linenums">package com.API.Pizzapp.Services.Impl;
 
+import com.API.Pizzapp.Models.ReseniaDTO;
+import com.API.Pizzapp.Models.ReseniaUserDTO;
 import com.API.Pizzapp.Models.ReseÃ±aEntity;
+import com.API.Pizzapp.Models.UserEntity;
 import com.API.Pizzapp.Repository.ReviewRepository;
+import com.API.Pizzapp.Repository.UserRepository;
 import com.API.Pizzapp.Services.ReviewServiceI;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ReviewServiceImpl implements ReviewServiceI {
 
 
-    private ReviewRepository reviewRepository;
+    private final ReviewRepository reviewRepository;
+
+    private final UserRepository userRepository;
 
     @Autowired
-<span class="fc" id="L20">    public ReviewServiceImpl(ReviewRepository reviewRepository) {</span>
-<span class="fc" id="L21">        this.reviewRepository = reviewRepository;</span>
-<span class="fc" id="L22">    }</span>
+<span class="fc" id="L26">    public ReviewServiceImpl(ReviewRepository reviewRepository, UserRepository userRepository) {</span>
+<span class="fc" id="L27">        this.reviewRepository = reviewRepository;</span>
+<span class="fc" id="L28">        this.userRepository = userRepository;</span>
+<span class="fc" id="L29">    }</span>
+    @Override
+    public ReseÃ±aEntity createReview(ReseniaDTO reseÃ±aDTO) {
+<span class="nc" id="L32">        ReseÃ±aEntity reseÃ±aEntity = new ReseÃ±aEntity();</span>
+
+<span class="nc" id="L34">        reseÃ±aEntity.setDateCreation(reseÃ±aDTO.getDateCreation());</span>
+<span class="nc" id="L35">        reseÃ±aEntity.setDescripcion(reseÃ±aDTO.getDescripcion());</span>
+<span class="nc" id="L36">        reseÃ±aEntity.setCalificacion(reseÃ±aDTO.getCalificacion());</span>
+<span class="nc" id="L37">        reseÃ±aEntity.setRestaurante(reseÃ±aDTO.getRestaurante());</span>
+<span class="nc" id="L38">        UserEntity userEntity = userRepository.findByEmail(reseÃ±aDTO.getEmail()).orElseThrow(() -&gt; new RuntimeException(&quot;Usuario no encontrado&quot;));</span>
+<span class="nc" id="L39">        reseÃ±aEntity.setAuthor(userEntity.getNombreUsuario());</span>
+
+<span class="nc" id="L41">        reseÃ±aEntity.setUser(userEntity);</span>
+
+<span class="nc" id="L43">        return reviewRepository.save(reseÃ±aEntity);</span>
+    }
+
 
     @Override
-    public ReseÃ±aEntity createReview(ReseÃ±aEntity reseÃ±aEntity) {
+    public ReseÃ±aEntity updateReview(Long id,ReseniaDTO reseÃ±aEntity) {
+<span class="nc" id="L49">        ReseÃ±aEntity reseÃ±aEntity1 = reviewRepository.findById(id)</span>
+<span class="nc" id="L50">                .orElseThrow(() -&gt; new RuntimeException(&quot;No se encontrÃ³ la reseÃ±a con el id: &quot; + id));</span>
 
-<span class="nc" id="L27">        return reviewRepository.save(reseÃ±aEntity);</span>
+        // Actualizando los campos
+<span class="nc" id="L53">        reseÃ±aEntity1.setDateCreation(reseÃ±aEntity.getDateCreation());</span>
+<span class="nc" id="L54">        reseÃ±aEntity1.setAuthor(reseÃ±aEntity.getAuthor());</span>
+<span class="nc" id="L55">        reseÃ±aEntity1.setDescripcion(reseÃ±aEntity.getDescripcion());</span>
+<span class="nc" id="L56">        reseÃ±aEntity1.setCalificacion(reseÃ±aEntity.getCalificacion());</span>
+<span class="nc" id="L57">        reseÃ±aEntity1.setRestaurante(reseÃ±aEntity.getRestaurante());</span>
+
+        // AquÃ­ puedes agregar lÃ³gica para actualizar el usuario si es necesario
+
+<span class="nc" id="L61">        return reviewRepository.save(reseÃ±aEntity1);</span>
     }
 
-    public ReseÃ±aEntity updateReview(Long id,ReseÃ±aEntity reseÃ±aEntity) {
-<span class="nc" id="L31">    Optional&lt;ReseÃ±aEntity&gt; reseÃ±aEntity1= reviewRepository.findById(id);</span>
-<span class="nc bnc" id="L32" title="All 2 branches missed.">    if(!reseÃ±aEntity1.isEmpty()){</span>
-<span class="nc" id="L33">     return    reviewRepository.save(reseÃ±aEntity);</span>
-    }
-<span class="nc" id="L35">    throw new RuntimeException(&quot;No se encontro usuario&quot;);</span>
+
+    @Override
+    public List&lt;ReseniaUserDTO&gt; getAllReview() {
+<span class="nc" id="L67">        return reviewRepository.findAll().stream()</span>
+<span class="nc" id="L68">                .map(this::convertToDTO)</span>
+<span class="nc" id="L69">                .collect(Collectors.toList());</span>
     }
 
     @Override
-    public List&lt;ReseÃ±aEntity&gt; getAllReview() {
-<span class="nc" id="L40">        return reviewRepository.findAll();</span>
+    public ReseniaUserDTO getReviewById(Long id) {
+<span class="nc" id="L74">        ReseÃ±aEntity reseÃ±a = reviewRepository.findById(id)</span>
+<span class="nc" id="L75">                .orElseThrow(() -&gt; new EntityNotFoundException(&quot;ReseÃ±a no encontrada&quot;));</span>
+<span class="nc" id="L76">        return convertToDTO(reseÃ±a);</span>
     }
 
-    @Override
-    public ReseÃ±aEntity getReviewById(Long id) {
-<span class="nc" id="L45">        return reviewRepository.findById(id)</span>
-<span class="nc" id="L46">                .orElseThrow(() -&gt; new EntityNotFoundException(&quot;ReseÃ±a no encontrada &quot;));</span>
+    private ReseniaUserDTO convertToDTO(ReseÃ±aEntity reseÃ±a) {
+<span class="nc" id="L80">        ReseniaUserDTO dto = new ReseniaUserDTO();</span>
+        // Copia la informaciÃ³n de la reseÃ±a y del usuario al DTO
+<span class="nc" id="L82">        UserEntity user = reseÃ±a.getUser();</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">        if (user != null) {</span>
+<span class="nc" id="L84">            dto.setNombreUsuario(user.getNombreUsuario());</span>
+<span class="nc" id="L85">            dto.setNombre(user.getNombre());</span>
+<span class="nc" id="L86">            dto.setApellido(user.getApellido());</span>
+<span class="nc" id="L87">            dto.setEmail(user.getEmail());</span>
+<span class="nc" id="L88">            dto.setProfilePicture(user.getProfilePicture());</span>
+        }
+<span class="nc" id="L90">        dto.setId(reseÃ±a.getId());</span>
+<span class="nc" id="L91">        dto.setAuthor(reseÃ±a.getAuthor());</span>
+<span class="nc" id="L92">        dto.setCalificacion(reseÃ±a.getCalificacion());</span>
+<span class="nc" id="L93">        dto.setRestaurante(reseÃ±a.getRestaurante());</span>
+<span class="nc" id="L94">        dto.setDescripcion(reseÃ±a.getDescripcion());</span>
+<span class="nc" id="L95">        dto.setDateCreation(reseÃ±a.getDateCreation());</span>
+<span class="nc" id="L96">        return dto;</span>
     }
-
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

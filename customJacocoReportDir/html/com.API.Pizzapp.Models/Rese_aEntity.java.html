@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 @Entity
-<span class="nc bnc" id="L11" title="All 54 branches missed.">@Data</span>
+<span class="nc bnc" id="L11" title="All 56 branches missed.">@Data</span>
 <span class="fc" id="L12">@NoArgsConstructor</span>
 <span class="nc" id="L13">@AllArgsConstructor</span>
 public class ReseÃ±aEntity {
@@ -23,17 +23,18 @@ public class ReseÃ±aEntity {
     @Column(nullable = false, unique = true)
 <span class="nc" id="L24">    private String author;</span>
 
-    @Column(nullable = false, unique = true)
-<span class="nc" id="L27">    private String typePizza;</span>
+    @Column(nullable = false, unique = false)
+<span class="nc" id="L27">    private String descripcion;</span>
 
+    @Column(nullable = false)
+<span class="nc" id="L30">    private  int calificacion;</span>
 
     @ManyToOne
     @JoinColumn(name = &quot;user_id&quot;, nullable = false)
-<span class="nc" id="L32">    private UserEntity user;</span>
+<span class="nc" id="L34">    private UserEntity user;</span>
 
-    @ManyToOne
-    @JoinColumn(name = &quot;restaurante_id&quot;, nullable = false)
-<span class="nc" id="L36">    private RestauranEntity restaurante;</span>
+    @Column(nullable = false, unique = false)
+<span class="nc" id="L37">    private String restaurante;</span>
 }
 
 
