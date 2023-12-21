@@ -23,17 +23,18 @@ public class ReseñaEntity {
     @Column(nullable = false, unique = true)
     private String author;
 
-    @Column(nullable = false, unique = true)
-    private String typePizza;
+    @Column(nullable = false, unique = false)
+    private String descripcion;
 
+    @Column(nullable = false)
+    private  int calificacion;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
-    @ManyToOne
-    @JoinColumn(name = "restaurante_id", nullable = false)
-    private RestauranEntity restaurante;
+    @Column(nullable = false, unique = false)
+    private String restaurante;
 }
 
 

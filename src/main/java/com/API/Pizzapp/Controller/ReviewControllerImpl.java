@@ -1,7 +1,11 @@
 package com.API.Pizzapp.Controller;
 
+import com.API.Pizzapp.Models.ReseniaDTO;
 import com.API.Pizzapp.Models.ReseñaEntity;
+import com.API.Pizzapp.Security.JwtAuthenticationFilter;
+import com.API.Pizzapp.Services.JwtService;
 import com.API.Pizzapp.Services.ReviewServiceI;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,19 +21,28 @@ public class ReviewControllerImpl implements ReviewControllerI {
 
 
 
-    private ReviewServiceI reviewServiceI;
+     ReviewServiceI reviewServiceI;
+
+     JwtAuthenticationFilter jwtAutorizationFilter;
+
+     JwtService jwtService;
+
 
     @Autowired
-    public ReviewControllerImpl(ReviewServiceI reviewServiceI) {
+    public ReviewControllerImpl(ReviewServiceI reviewServiceI, JwtAuthenticationFilter jwtAutorizationFilter, JwtService jwtService) {
         this.reviewServiceI = reviewServiceI;
+        this.jwtAutorizationFilter = jwtAutorizationFilter;
+        this.jwtService = jwtService;
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/CreateReview")
-    public ResponseEntity createReview(@RequestBody ReseñaEntity reseñaEntity) {
+    public ResponseEntity createReview(HttpServletRequest request, @RequestBody ReseniaDTO reseniaDTO) {
         try{
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String token= jwtAutorizationFilter.getTokenFromRequest(request);
+            String email= jwtService.getUsernameFromToken(token);
+            reseniaDTO.setEmail(email);
 
-            ReseñaEntity reseñaEntity1= reviewServiceI.createReview(reseñaEntity);
+            ReseñaEntity reseñaEntity1= reviewServiceI.createReview(reseniaDTO);
             return new ResponseEntity(reseñaEntity1, HttpStatus.CREATED);
         }catch  (Exception e) {
             return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
@@ -41,7 +54,7 @@ public class ReviewControllerImpl implements ReviewControllerI {
 
 
     @RequestMapping(method = RequestMethod.PATCH, path = "/UpdateReview/{id}")
-    public ResponseEntity updateReview(@PathVariable Long id, @RequestBody  ReseñaEntity reseñaEntity) {
+    public ResponseEntity updateReview(@PathVariable Long id, @RequestBody  ReseniaDTO reseñaEntity) {
         try{
             return new ResponseEntity(reviewServiceI.updateReview(id,reseñaEntity),HttpStatus.ACCEPTED);
         }catch ( Exception e){
